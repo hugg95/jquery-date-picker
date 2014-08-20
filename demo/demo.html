@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Calendar demo</title>
+        <style>
+            div,
+            span {
+                margin: 0;
+                padding: 0;
+            }
+            #calendar {
+                position: absolute;
+                border: 1px solid #04477c;
+                border-radius: 3px;
+            }
+            .cal-style {
+                font-family: 'Microsoft Yahei';
+                font-size: 0;
+            }
+            .cal-header {
+            }
+            .cal-info {
+                height: 30px;
+            }
+            .cal-weeks {
+                border-bottom: 1px solid #04477c;
+            }
+            .cal-day {
+                display: inline-block;
+                width: 36px;
+                height: 26px;
+                border-color: #04477c;
+                border-width: 1px 0 0 1px;
+                border-style: solid;
+                text-align: center;
+                line-height: 26px;
+                font-size: 12px;
+            }
+            .day-mon {
+                border-left: 0;
+            }
+            .cal-body {
+                padding-top: 5px;
+            }
+            .cal-per-week {
+                height: 26px;
+            }
+            .cal-per-date {
+                display: inline-block;
+                width: 36px;
+                height: 26px;
+                border-width: 1px 0 0 1px;
+                border-style: solid;
+                border-color: #04477c;
+                font-size: 12px;
+                text-align: center;
+                line-height: 26px;
+                cursor: pointer;
+            }
+            .first-date {
+                border-left: 0;
+            }
+            .cal-per-date:hover {
+                background-color: #f0f0f0;
+            }
+            .prev,
+            .next {
+                display: inline-block;
+                width: 20%;
+                height: 30px;
+                text-align: center;
+                cursor: pointer;
+            }
+            .prev-icon,
+            .next-icon {
+                width: 20px;
+                height: 20px;
+                display: inline-block;
+                background: url(icon.png) no-repeat;
+                margin-top: 5px;
+            }
+            .prev-icon {
+                background-position: -39px -95px;
+            }
+            .prev-icon:hover {
+                background-position: -9px -95px;
+            }
+            .next-icon {
+                background-position: -29px -125px;
+            }
+            .next-icon:hover {
+                background-position: 1px -125px;
+            }
+            .cal-year-month {
+                width: 60%;
+                height: 30px;
+                display: inline-block;
+                font-size: 12px;
+                line-height: 30px;
+                text-align: center;
+                vertical-align: top;
+            }
+            
+        </style>
+    </head>
+    <body>
+    <div id="demo" style="width:500px;height:500px;"></div>
+        <div id="calendar" class="cal-style">
+            <div class="cal-header">
+                <div class="cal-info">
+                    <span class="prev">
+                        <span class="prev-icon"></span>
+                    </span>
+                    <span class="cal-year-month">2014年6月</span>
+                    <span class="next">
+                        <span class="next-icon"></span>
+                    </span>
+                </div>
+                <div class="cal-weeks">
+                    <span class="cal-day day-mon">一</span>
+                    <span class="cal-day day-tues">二</span>
+                    <span class="cal-day day-wed">三</span>
+                    <span class="cal-day day-thur">四</span>
+                    <span class="cal-day day-fri">五</span>
+                    <span class="cal-day day-sat">六</span>
+                    <span class="cal-day day-sun">七</span>
+                </div>
+            </div>
+            <div class="cal-body">
+                <div class="cal-per-week">
+                    <span class="cal-per-date first-date">0</span>
+                    <span class="cal-per-date">1</span>
+                    <span class="cal-per-date">2</span>
+                    <span class="cal-per-date">3</span>
+                    <span class="cal-per-date">4</span>
+                    <span class="cal-per-date">5</span>
+                    <span class="cal-per-date">6</span>
+                </div>
+                <div class="cal-per-week">
+                    <span class="cal-per-date first-date">7</span>
+                    <span class="cal-per-date">8</span>
+                    <span class="cal-per-date">9</span>
+                    <span class="cal-per-date">10</span>
+                    <span class="cal-per-date">11</span>
+                    <span class="cal-per-date">12</span>
+                    <span class="cal-per-date">13</span>
+                </div>
+                <div class="cal-per-week">
+                    <span class="cal-per-date first-date">14</span>
+                    <span class="cal-per-date">15</span>
+                    <span class="cal-per-date">16</span>
+                    <span class="cal-per-date">17</span>
+                    <span class="cal-per-date">18</span>
+                    <span class="cal-per-date">0</span>
+                    <span class="cal-per-date">0</span>
+                </div>
+                <div class="cal-per-week">
+                    <span class="cal-per-date first-date">0</span>
+                    <span class="cal-per-date">0</span>
+                    <span class="cal-per-date">0</span>
+                    <span class="cal-per-date">0</span>
+                    <span class="cal-per-date">0</span>
+                    <span class="cal-per-date">0</span>
+                    <span class="cal-per-date">0</span>
+                </div>
+                <div class="cal-per-week">
+                    <span class="cal-per-date first-date"></span>
+                    <span class="cal-per-date"></span>
+                    <span class="cal-per-date"></span>
+                    <span class="cal-per-date"></span>
+                    <span class="cal-per-date"></span>
+                    <span class="cal-per-date"></span>
+                    <span class="cal-per-date"></span>
+                </div>
+            </div>
+            <div class="cal-footer"></div>
+        </div>
+    </body>
+    <script type="text/javascript" src="jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="../calendar.js"></script>
+</html>
+
