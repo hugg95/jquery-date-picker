@@ -36,6 +36,9 @@
                 line-height: 26px;
                 font-size: 12px;
             }
+            .cal-day:first-child {
+                border-left: 0;
+            }
             .day-mon {
                 border-left: 0;
             }
@@ -44,21 +47,34 @@
             }
             .cal-per-week {
                 height: 26px;
+                border-bottom: 1px solid #04477c;
+            }
+            .cal-per-week:first-child {
+                border-top: 1px solid #04477c;
+            }
+            .cal-per-week:last-child {
+                border-bottom: 0;
+            }
+            .has-date {
+                font-size: 12px;
+                line-height: 26px;
+                vertical-align: top;
             }
             .cal-per-date {
                 display: inline-block;
                 width: 36px;
                 height: 26px;
-                border-width: 1px 0 0 1px;
+                border-width: 0px 0 0 1px;
                 border-style: solid;
                 border-color: #04477c;
-                font-size: 12px;
                 text-align: center;
-                line-height: 26px;
                 cursor: pointer;
             }
-            .first-date {
+            .cal-per-date:first-child {
                 border-left: 0;
+            }
+            .cal-per-date:nth-child(n) {
+                /*border-left: 0;*/
             }
             .cal-per-date:hover {
                 background-color: #f0f0f0;
@@ -105,7 +121,7 @@
     </head>
     <body>
     <div id="demo" style="width:500px;height:500px;"></div>
-        <div id="calendar" class="cal-style">
+        <!-- <div id="calendar" class="cal-style">
             <div class="cal-header">
                 <div class="cal-info">
                     <span class="prev">
@@ -174,9 +190,12 @@
                 </div>
             </div>
             <div class="cal-footer"></div>
-        </div>
+        </div> -->
     </body>
     <script type="text/javascript" src="jquery-1.11.1.js"></script>
     <script type="text/javascript" src="../calendar.js"></script>
+    <script type="text/javascript">
+        $('#demo').calendar();
+    </script
 </html>
 
