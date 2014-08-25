@@ -17,7 +17,7 @@
             		+ '<div class="cal-header">'
                 		+ '<div class="cal-info">'
                     		+ '<span class="prev"><span class="prev-icon"></span></span>'
-                    		+ '<span class="cal-year-month">2014年6月</span>'
+                    		+ '<span class="cal-year-month"></span>'
                     		+ '<span class="next"><span class="next-icon"></span></span>'
                 		+ '</div>'
                 		+ '<div class="cal-weeks"></div>'
@@ -33,13 +33,14 @@
     	cnLong: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
     };
 
-    var current = new Date('2014-02-01'),
+    // Sets the default current date is now
+    var current = new Date('2015-03-01'),
     	currYear = current.getFullYear(),
     	currMonth = current.getMonth() + 1,
     	currDate = current.getDate();
 
     /**
-     * render the calendar
+     * Render the calendar
      */
     var init = function(options) {
     	var container = options.container,
@@ -66,9 +67,21 @@
         }
     };
 
+    /**
+     * Sets current year and month for calendar
+     */
+    var renderYearMonth = function() {
+        var yearAndMonth = format.call(current);
+        $('.cal-year-month').text(yearAndMonth);
+    };
+
+    /**
+     * Fills cells with dates
+     */
     var renderCells = function() {
+        $('.cal-per-date').text('').removeClass('has-date');
     	var firstDayInMonth = getFirstDayInMonth(current),
-    		datesInMonth = getDatesInMonth(current);console.log(firstDayInMonth-2);
+    		datesInMonth = getDatesInMonth(current);
     	var cells = $('.cal-per-date:eq(' + (firstDayInMonth - 1) + '), .cal-per-date:gt(' + (firstDayInMonth - 1) + ')');
     		for (var i = 1; i <= datesInMonth; i++) {
     			var dataDate = format.call(current);
@@ -87,6 +100,34 @@
     		dateOfNextMonth = new Date(date);
     		dateOfNextMonth.setMonth(currMonth);
     	return parseInt((dateOfNextMonth.getTime() - date.getTime()) / 1000 / 60 / 60 / 24);
+    };
+
+    /**
+     * Go to the next month
+     */
+    var nextMonth = function() {
+        if (currMonth < 12) {
+            currMonth++;
+        } else {
+            currMonth = 1;
+            currYear++;
+        }
+        current.setFullYear(currYear);
+        current.setMonth(currMonth);
+    };
+
+    /**
+     * Go to the previous month
+     */
+    var prevMonth = function() {
+        if (currMonth > 1) {
+            currMonth--;
+        } else {
+            currMonth = 12;
+            currYear--;
+        }
+        current.setFullYear(currYear);
+        current.setMonth(currMonth);
     };
 
     var format = function(format) {
@@ -129,9 +170,44 @@
 
     };
 
+    var addListener = function(target, event, fn) {
+        $('body').on(event, target, function() {
+            if (typeof fn === 'function') {
+                fn();
+            }
+        });
+    };
+
+    var events = [
+        {
+            t: '.next',
+            e: 'click',
+            f: function() {
+                nextMonth();
+                renderYearMonth();
+                renderCells();
+            }
+        },
+        {
+            t: '.prev',
+            e: 'click',
+            f: function() {
+                prevMonth();
+                renderYearMonth();
+                renderCells();
+            }
+        }
+    ];
+
+    for (var i = 0; i < events.length; i++) {
+        addListener(events[i].t, events[i].e, events[i].f);
+    }
+
     $.fn.calendar = function(options) {
         var settings = $.extend(defaults, options);
         init(settings);
+        renderYearMonth();
         renderCells();
     };
+
  })(jQuery);
