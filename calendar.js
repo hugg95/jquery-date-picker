@@ -33,7 +33,7 @@
     	cnLong: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
     };
 
-    var current = new Date(),
+    var current = new Date('2014-02-01'),
     	currYear = current.getFullYear(),
     	currMonth = current.getMonth() + 1,
     	currDate = current.getDate();
@@ -68,8 +68,8 @@
 
     var renderCells = function() {
     	var firstDayInMonth = getFirstDayInMonth(current),
-    		datesInMonth = getDatesInMonth(current);console.log(firstDayInMonth-3);
-    	var cells = $('.cal-per-date:gt(' + (firstDayInMonth - 2) + ')');
+    		datesInMonth = getDatesInMonth(current);console.log(firstDayInMonth-2);
+    	var cells = $('.cal-per-date:eq(' + (firstDayInMonth - 1) + '), .cal-per-date:gt(' + (firstDayInMonth - 1) + ')');
     		for (var i = 1; i <= datesInMonth; i++) {
     			var dataDate = format.call(current);
     			$(cells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
