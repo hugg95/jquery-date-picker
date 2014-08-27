@@ -10,7 +10,8 @@
 	var defaults = {
 		container: 'body',
 		language: 'cn',
-		mode: 'single'
+		mode: 'single',
+        weekStart: '1'
 	};
 
 	var _html = '<div id="calendar" class="cal-style">'
@@ -28,13 +29,13 @@
 
     var weeks = {
     	enShort: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-    	cnShort: ['一', '二', '三', '四', '五', '六', '七'],
+    	cnShort: ['一', '二', '三', '四', '五', '六', '日'],
     	enLong: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     	cnLong: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
     };
 
     // Sets the default current date is now
-    var current = new Date('2015-03-01'),
+    var current = new Date(),
     	currYear = current.getFullYear(),
     	currMonth = current.getMonth() + 1,
     	currDate = current.getDate();
@@ -48,12 +49,13 @@
         $(container).html($(_html));
 
         // render weeks
-        var weeksPanel = $('#calendar').find('.cal-weeks'),
+        /*var weeksPanel = $('#calendar').find('.cal-weeks'),
         	weeksData = weeks[language + 'Short'];
         weeksData.forEach(function(d) {
         	var perDay = $('<span class="cal-day"></span>');
         	weeksPanel.append(perDay.text(d));
-        });
+        });*/
+        renderWeeks(options);
 
         // render some cells to show date
         var datesPanel = $('#calendar').find('.cal-body');
@@ -68,6 +70,30 @@
     };
 
     /**
+     * Render weeks
+     */
+    var renderWeeks = function(options) {
+        // gets language and week-start
+        var  language = options.language,
+             weekStart = options.weekStart;
+
+        var panel = $('#calendar').find('.cal-weeks'),
+            weeksData = weeks[language + 'Short'];
+        weekStart--;
+
+        var firstDay = $('<span class="cal-day"></span>');
+        $(panel[0]).append(firstDay.text(weeksData[weekStart]));
+        for (var i = 1; i < weeks[language + 'Short'].length - weekStart; i++) {
+            var perDay = $('<span class="cal-day"></span>');
+            panel.append(perDay.text(weeks[language + 'Short'][i + weekStart]));
+        }
+        for (var i = 0; i < weekStart; i++) {
+            var perDay = $('<span class="cal-day"></span>');
+            panel.append(perDay.text(weeks[language + 'Short'][i]));
+        }
+    };
+
+    /**
      * Sets current year and month for calendar
      */
     var renderYearMonth = function() {
@@ -78,15 +104,24 @@
     /**
      * Fills cells with dates
      */
-    var renderCells = function() {
+    var renderCells = function(options) {
         $('.cal-per-date').text('').removeClass('has-date');
     	var firstDayInMonth = getFirstDayInMonth(current),
     		datesInMonth = getDatesInMonth(current);
-    	var cells = $('.cal-per-date:eq(' + (firstDayInMonth - 1) + '), .cal-per-date:gt(' + (firstDayInMonth - 1) + ')');
-    		for (var i = 1; i <= datesInMonth; i++) {
-    			var dataDate = format.call(current);
-    			$(cells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
-    		}
+
+        var weekStart = options.weekStart;
+        var firstDate;
+        if (firstDayInMonth < weekStart) {
+            firstDate = firstDayInMonth - weekStart + 7;
+        } else {
+            firstDate = firstDayInMonth - weekStart
+        }
+
+    	var cells = $('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')');
+    	for (var i = 1; i <= datesInMonth; i++) {
+    		var dataDate = format.call(current);
+    		$(cells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
+    	}
     };
 
     var getFirstDayInMonth = function(date) {
@@ -207,7 +242,7 @@
         var settings = $.extend(defaults, options);
         init(settings);
         renderYearMonth();
-        renderCells();
+        renderCells(settings);
     };
 
  })(jQuery);
