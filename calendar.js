@@ -45,10 +45,10 @@
     /**
      * Render the calendar
      */
-    var init = function(options) {
+    var init = function() {
         // set options for global use
-        $.fn.calendar.settings = options;
-    	var container = options.container,
+        var options = $.fn.calendar.settings,
+    	    container = options.container,
     		language = options.language;
         $(container).html($(_html));
 
@@ -164,7 +164,6 @@
                 }
             }
         }
-
     };
 
     var getFirstDayInMonth = function(date) {
@@ -262,6 +261,7 @@
             e: 'click',
             f: function() {
                 nextMonth();
+                init();
                 renderYearMonth();
                 renderCells();
             }
@@ -271,6 +271,7 @@
             e: 'click',
             f: function() {
                 prevMonth();
+                init();
                 renderYearMonth();
                 renderCells();
             }
@@ -282,8 +283,8 @@
     }
 
     $.fn.calendar = function(options) {
-        var settings = $.extend(defaults, options);
-        init(settings);
+        $.fn.calendar.settings = $.extend(defaults, options);
+        init();
         renderYearMonth();
         renderCells();
     };
