@@ -62,7 +62,7 @@
         renderWeeks();
 
         // render some cells to show date
-        var datesPanel = $('#calendar').find('.cal-body');
+        /*var datesPanel = $('#calendar').find('.cal-body');
         for (var i = 1; i <= 5; i++) {
         	var perWeek = $('<div class="cal-per-week"></div>');
         	for (var j = (i - 1) * 7 + 1; j <= i * 7; j++) {
@@ -70,7 +70,23 @@
         		perWeek.append(perDate);
         	}
         	datesPanel.append(perWeek);
+        }*/
+        for (var i = 0; i < 5; i++) {
+            createSingleContainer();
         }
+    };
+
+    /**
+     * Creates a single line of container for fill every seven dates
+     */
+    var createSingleContainer = function() {
+        var panel = $('#calendar').find('.cal-body'),
+            container = $('<div class="cal-per-week"></div>');
+        for (var i = 0; i < 7; i++) {
+            var perDate = $('<span class="cal-per-date"></span>');
+            container.append(perDate);
+        }
+        panel.append(container);
     };
 
     /**
@@ -123,11 +139,32 @@
             firstDate = firstDayInMonth - weekStart
         }
 
-    	var cells = $('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')');
+    	var cells = $('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
+            last,
+            curr = new Date(current);
     	for (var i = 1; i <= datesInMonth; i++) {
-    		var dataDate = format.call(current);
-    		$(cells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
+            if (cells[i - 1]) {
+                curr.setDate(i);
+                 var dataDate = format.call(curr);
+                $(cells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
+                last = i;
+            }
     	}
+
+        // render the rest dates
+        if (last < datesInMonth) {
+            createSingleContainer();
+            cells = $('.cal-per-date:gt(34)');
+            var rest = datesInMonth - last;
+            for (var i = 0; i < rest; i++) {
+                if (cells[i]) {
+                    curr.setDate(last + i + 1);
+                    var dataDate = format.call(curr);
+                    $(cells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
+                }
+            }
+        }
+
     };
 
     var getFirstDayInMonth = function(date) {
