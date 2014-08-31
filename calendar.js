@@ -1,17 +1,19 @@
 /**
- * jquery date picker
- * @author Victor Li
+ * A customizable date picker based on jQuery.
+ * @author Victor Li lncwwn@gmail.com
  * @version 1.0
- * @lincense MIT
+ * Released under terms of the MIT lincense.
  */
 
 (function($) {
 
+    // default setting
 	var defaults = {
 		container: 'body',
 		language: 'cn',
 		mode: 'single',
-        weekStart: '1'
+        weekStart: '1',
+        theme: 'normal',
 	};
 
 	var _html = '<div id="calendar" class="cal-style">'
@@ -44,6 +46,8 @@
      * Render the calendar
      */
     var init = function(options) {
+        // set options for global use
+        $.fn.calendar.settings = options;
     	var container = options.container,
     		language = options.language;
         $(container).html($(_html));
@@ -55,7 +59,7 @@
         	var perDay = $('<span class="cal-day"></span>');
         	weeksPanel.append(perDay.text(d));
         });*/
-        renderWeeks(options);
+        renderWeeks();
 
         // render some cells to show date
         var datesPanel = $('#calendar').find('.cal-body');
@@ -72,7 +76,8 @@
     /**
      * Render weeks
      */
-    var renderWeeks = function(options) {
+    var renderWeeks = function() {
+        var options = $.fn.calendar.settings;
         // gets language and week-start
         var  language = options.language,
              weekStart = options.weekStart;
@@ -104,7 +109,8 @@
     /**
      * Fills cells with dates
      */
-    var renderCells = function(options) {
+    var renderCells = function() {
+        var options = $.fn.calendar.settings;
         $('.cal-per-date').text('').removeClass('has-date');
     	var firstDayInMonth = getFirstDayInMonth(current),
     		datesInMonth = getDatesInMonth(current);
@@ -242,7 +248,7 @@
         var settings = $.extend(defaults, options);
         init(settings);
         renderYearMonth();
-        renderCells(settings);
+        renderCells();
     };
 
  })(jQuery);
