@@ -4,7 +4,7 @@ span {
     padding: 0;
 }
 
-#calendar {
+#jq-date-picker {
     position: absolute;
     border: 1px solid #04477c;
     border-radius: 3px;
@@ -15,7 +15,16 @@ span {
     font-size: 0;
 }
 
+.per-picker {
+    float: left;
+}
+
+.per-picker:nth-child(2n) {
+    border-left: 1px solid #04477c;
+}
+
 .cal-header {
+    
 }
 
 .cal-info {
@@ -48,6 +57,7 @@ span {
 
 .cal-body {
     padding-top: 5px;
+    display: inline-block;
 }
 
 .cal-per-week {

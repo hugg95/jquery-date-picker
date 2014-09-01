@@ -12,21 +12,23 @@
 		container: 'body',
 		language: 'cn',
 		mode: 'single',
-        weekStart: '1',
+        weekStart: '7',
         theme: 'normal',
 	};
 
-	var _html = '<div id="calendar" class="cal-style">'
-            		+ '<div class="cal-header">'
-                		+ '<div class="cal-info">'
-                    		+ '<span class="prev"><span class="prev-icon"></span></span>'
-                    		+ '<span class="cal-year-month"></span>'
-                    		+ '<span class="next"><span class="next-icon"></span></span>'
-                		+ '</div>'
-                		+ '<div class="cal-weeks"></div>'
-            		+ '</div>'
-            		+ '<div class="cal-body"></div>'
-            		+ '<div class="cal-footer"></div>'
+	var _html = '<div id="jq-date-picker" class="cal-style">'
+                    + '<div class="per-picker">'
+            		    + '<div class="cal-header">'
+                		    + '<div class="cal-info">'
+                    		    + '<span class="prev"><span class="prev-icon"></span></span>'
+                    		    + '<span class="cal-year-month"></span>'
+                    		    + '<span class="next"><span class="next-icon"></span></span>'
+                		    + '</div>'
+                		    + '<div class="cal-weeks"></div>'
+            		    + '</div>'
+            		    + '<div class="cal-body"></div>'
+            		    + '<div class="cal-footer"></div>'
+                    + '</div>'
         		+ '</div>';
 
     var weeks = {
@@ -53,7 +55,7 @@
         $(container).html($(_html));
 
         // render weeks
-        /*var weeksPanel = $('#calendar').find('.cal-weeks'),
+        /*var weeksPanel = $('#jq-date-picker').find('.cal-weeks'),
         	weeksData = weeks[language + 'Short'];
         weeksData.forEach(function(d) {
         	var perDay = $('<span class="cal-day"></span>');
@@ -62,7 +64,7 @@
         renderWeeks();
 
         // render some cells to show date
-        /*var datesPanel = $('#calendar').find('.cal-body');
+        /*var datesPanel = $('#jq-date-picker').find('.cal-body');
         for (var i = 1; i <= 5; i++) {
         	var perWeek = $('<div class="cal-per-week"></div>');
         	for (var j = (i - 1) * 7 + 1; j <= i * 7; j++) {
@@ -71,7 +73,7 @@
         	}
         	datesPanel.append(perWeek);
         }*/
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 4; i++) {
             createSingleContainer();
         }
     };
@@ -80,7 +82,7 @@
      * Creates a single line of container for fill every seven dates
      */
     var createSingleContainer = function() {
-        var panel = $('#calendar').find('.cal-body'),
+        var panel = $('#jq-date-picker').find('.cal-body'),
             container = $('<div class="cal-per-week"></div>');
         for (var i = 0; i < 7; i++) {
             var perDate = $('<span class="cal-per-date"></span>');
@@ -98,7 +100,7 @@
         var  language = options.language,
              weekStart = options.weekStart;
 
-        var panel = $('#calendar').find('.cal-weeks'),
+        var panel = $('#jq-date-picker').find('.cal-weeks'),
             weeksData = weeks[language + 'Short'];
         weekStart--;
 
@@ -126,8 +128,9 @@
      * Fills cells with dates
      */
     var renderCells = function() {
-        var options = $.fn.calendar.settings;
-        $('.cal-per-date').text('').removeClass('has-date');
+        var options = $.fn.calendar.settings,
+            cells = $('.cal-per-date');
+        cells.text('').removeClass('has-date');
     	var firstDayInMonth = getFirstDayInMonth(current),
     		datesInMonth = getDatesInMonth(current);
 
@@ -139,28 +142,33 @@
             firstDate = firstDayInMonth - weekStart
         }
 
-    	var cells = $('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
+    	var firstFillCells = $('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
             last,
             curr = new Date(current);
     	for (var i = 1; i <= datesInMonth; i++) {
-            if (cells[i - 1]) {
+            if (firstFillCells[i - 1]) {
                 curr.setDate(i);
-                 var dataDate = format.call(curr);
-                $(cells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
+                var dataDate = format.call(curr);
+                $(firstFillCells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
                 last = i;
             }
     	}
 
+        var lastCellIndex = cells.index($('.cal-per-date:last'));
+
         // render the rest dates
         if (last < datesInMonth) {
-            createSingleContainer();
-            cells = $('.cal-per-date:gt(34)');
+            var times = datesInMonth - last > 7 ? 2 : 1;
+            for (var i = 0; i < times; i++) {
+                createSingleContainer();
+            }
+            var lastFillCells = $('.cal-per-date:gt(' + lastCellIndex + ')');
             var rest = datesInMonth - last;
             for (var i = 0; i < rest; i++) {
-                if (cells[i]) {
+                if (lastFillCells[i]) {
                     curr.setDate(last + i + 1);
                     var dataDate = format.call(curr);
-                    $(cells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
+                    $(lastFillCells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
                 }
             }
         }
@@ -190,7 +198,7 @@
             currYear++;
         }
         current.setFullYear(currYear);
-        current.setMonth(currMonth);
+        current.setMonth(currMonth - 1);
     };
 
     /**
@@ -204,7 +212,7 @@
             currYear--;
         }
         current.setFullYear(currYear);
-        current.setMonth(currMonth);
+        current.setMonth(currMonth - 1);
     };
 
     var format = function(format) {
@@ -290,3 +298,4 @@
     };
 
  })(jQuery);
+
