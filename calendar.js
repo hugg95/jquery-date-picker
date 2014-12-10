@@ -93,7 +93,8 @@
         	weeksPanel.append(perDay.text(d));
         });*/
         for (var i = 0; i < pickersNum; i++) {
-           renderWeeks(i);
+            renderYearMonth(i);
+            renderWeeks(i);
         }
 
         // render some cells to show date
@@ -111,9 +112,9 @@
                 createSingleContainer(i);
             }
         }
-        //for (var i = 0; i < 4; i++) {
-        //    createSingleContainer();
-        //}
+        for (var i = 0; i < pickersNum; i++) {
+            renderCells(i);
+        }
     };
 
     /**
@@ -184,15 +185,15 @@
      */
     var renderYearMonth = function(pickerId) {
         var yearAndMonth = format.call(current);
-        $('.cal-year-month').text(yearAndMonth);
+        $('#picker-' + pickerId).find('.cal-year-month').text(yearAndMonth);
     };
 
     /**
      * Fills cells with dates
      */
-    var renderCells = function() {
+    var renderCells = function(pickerId) {
         var options = $.fn.calendar.settings,
-            cells = $('.cal-per-date');
+            cells = $('#picker-' + pickerId).find('.cal-per-date');
         cells.text('').removeClass('has-date');
     	var firstDayInMonth = getFirstDayInMonth(current),
     		datesInMonth = getDatesInMonth(current);
@@ -205,7 +206,7 @@
             firstDate = firstDayInMonth - weekStart
         }
 
-    	var firstFillCells = $('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
+    	var firstFillCells = $('#picker-' + pickerId).find('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
             last,
             curr = new Date(current);
     	for (var i = 1; i <= datesInMonth; i++) {
@@ -223,7 +224,7 @@
         if (last < datesInMonth) {
             var times = datesInMonth - last > 7 ? 2 : 1;
             for (var i = 0; i < times; i++) {
-                createSingleContainer();
+                createSingleContainer(pickerId);
             }
             var lastFillCells = $('.cal-per-date:gt(' + lastCellIndex + ')');
             var rest = datesInMonth - last;
@@ -356,8 +357,6 @@
     $.fn.calendar = function(options) {
         $.fn.calendar.settings = $.extend(defaults, options);
         init();
-        renderYearMonth();
-        renderCells();
     };
 
  })(jQuery);
