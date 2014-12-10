@@ -38,21 +38,6 @@
     structure.body = '<div class="cal-body"></div>';
     structure.footer = '<div class="cal-footer"></div>';
 
-	/*var _html = '<div id="jq-date-picker" class="cal-style">'
-                    + '<div class="per-picker">'
-            		    + '<div class="cal-header">'
-                		    + '<div class="cal-info">'
-                    		    + '<span class="prev"><span class="prev-icon"></span></span>'
-                    		    + '<span class="cal-year-month"></span>'
-                    		    + '<span class="next"><span class="next-icon"></span></span>'
-                		    + '</div>'
-                		    + '<div class="cal-weeks"></div>'
-            		    + '</div>'
-            		    + '<div class="cal-body"></div>'
-            		    + '<div class="cal-footer"></div>'
-                    + '</div>'
-        		+ '</div>';*/
-
     var weeks = {
     	enShort: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
     	cnShort: ['一', '二', '三', '四', '五', '六', '日'],
@@ -85,34 +70,12 @@
         var structure = assembleStructure(pickersNum);
         $(container).html(structure);
 
-        // render weeks
-        /*var weeksPanel = $('#jq-date-picker').find('.cal-weeks'),
-        	weeksData = weeks[language + 'Short'];
-        weeksData.forEach(function(d) {
-        	var perDay = $('<span class="cal-day"></span>');
-        	weeksPanel.append(perDay.text(d));
-        });*/
         for (var i = 0; i < pickersNum; i++) {
             renderYearMonth(i);
             renderWeeks(i);
-        }
-
-        // render some cells to show date
-        /*var datesPanel = $('#jq-date-picker').find('.cal-body');
-        for (var i = 1; i <= 5; i++) {
-        	var perWeek = $('<div class="cal-per-week"></div>');
-        	for (var j = (i - 1) * 7 + 1; j <= i * 7; j++) {
-        		var perDate = $('<span class="cal-per-date"></span>');
-        		perWeek.append(perDate);
-        	}
-        	datesPanel.append(perWeek);
-        }*/
-        for (var i = 0; i < pickersNum; i++) {
             for (var j = 0; j < 4; j++) {
                 createSingleContainer(i);
             }
-        }
-        for (var i = 0; i < pickersNum; i++) {
             renderCells(i);
         }
     };
