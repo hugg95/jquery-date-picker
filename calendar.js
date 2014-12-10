@@ -10,13 +10,35 @@
     // default setting
 	var defaults = {
 		container: 'body',
-		language: 'cn',
-		mode: 'single',
-        weekStart: '7',
+		language: 'cn', // ['cn', 'en']
+		mode: 'single', // ['single', 'range']
+        weekStart: '7', // [1, 2, 3, 4, 5, 6]
         theme: 'normal',
 	};
 
-	var _html = '<div id="jq-date-picker" class="cal-style">'
+    // the html structure of date-picker
+    var structure = {
+        container: '',
+        picker: '',
+        header: '',
+        body: '',
+        footer: ''
+    };
+
+    structure.container = '<div id="jq-date-picker" class="cal-style"></div>';
+    structure.picker = '<div class="per-picker"></div>';
+    structure.header = '<div class="cal-header">' +
+                            '<div class="cal-info">' +
+                                '<span class="prev"><span class="prev-icon"></span></span>' +
+                                '<span class="cal-year-month"></span>' +
+                                '<span class="next"><span class="next-icon"></span></span>' +
+                            '</div>' +
+                            '<div class="cal-weeks"></div>' +
+                        '</div>';
+    structure.body = '<div class="cal-body"></div>';
+    structure.footer = '<div class="cal-footer"></div>';
+
+	/*var _html = '<div id="jq-date-picker" class="cal-style">'
                     + '<div class="per-picker">'
             		    + '<div class="cal-header">'
                 		    + '<div class="cal-info">'
@@ -29,7 +51,7 @@
             		    + '<div class="cal-body"></div>'
             		    + '<div class="cal-footer"></div>'
                     + '</div>'
-        		+ '</div>';
+        		+ '</div>';*/
 
     var weeks = {
     	enShort: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
@@ -51,8 +73,17 @@
         // set options for global use
         var options = $.fn.calendar.settings,
     	    container = options.container,
+            mode = options.mode,
     		language = options.language;
-        $(container).html($(_html));
+        var pickersNum = 1;
+        switch (mode) {
+            case 'single': pickersNum = 1; break;
+            case 'range': pickersNum = 2; break;
+            default: pickersNum = 1; break;
+        }
+
+        var structure = assembleStructure(pickersNum);
+        $(container).html(structure);
 
         // render weeks
         /*var weeksPanel = $('#jq-date-picker').find('.cal-weeks'),
@@ -61,7 +92,9 @@
         	var perDay = $('<span class="cal-day"></span>');
         	weeksPanel.append(perDay.text(d));
         });*/
-        renderWeeks();
+        for (var i = 0; i < pickersNum; i++) {
+           renderWeeks(i);
+        }
 
         // render some cells to show date
         /*var datesPanel = $('#jq-date-picker').find('.cal-body');
@@ -73,16 +106,44 @@
         	}
         	datesPanel.append(perWeek);
         }*/
-        for (var i = 0; i < 4; i++) {
-            createSingleContainer();
+        for (var i = 0; i < pickersNum; i++) {
+            for (var j = 0; j < 4; j++) {
+                createSingleContainer(i);
+            }
         }
+        //for (var i = 0; i < 4; i++) {
+        //    createSingleContainer();
+        //}
+    };
+
+    /**
+     * Assemble the structure of date-picker
+     * @param num how many date-pickers will be generated
+     */
+    var assembleStructure = function(num) {
+        var container = $(structure.container),
+            picker = $(structure.picker),
+            header = $(structure.header),
+            body = $(structure.body),
+            footer = $(structure.footer);
+
+        picker.append(header).append(body).append(footer);
+
+        if (!num) var num = 1;
+        for (var i = 0; i < num; i++) {
+            var picker = picker.attr('id', 'picker-' + i);
+            container.append(picker.clone());
+        }
+
+        return container;
     };
 
     /**
      * Creates a single line of container for fill every seven dates
+     * @param pickerId id of picker instance
      */
-    var createSingleContainer = function() {
-        var panel = $('#jq-date-picker').find('.cal-body'),
+    var createSingleContainer = function(pickerId) {
+        var panel = $('#jq-date-picker').find('#picker-' + pickerId).find('.cal-body'),
             container = $('<div class="cal-per-week"></div>');
         for (var i = 0; i < 7; i++) {
             var perDate = $('<span class="cal-per-date"></span>');
@@ -93,14 +154,15 @@
 
     /**
      * Render weeks
+     * @param pickerId  id of per picker instance
      */
-    var renderWeeks = function() {
+    var renderWeeks = function(pickerId) {
         var options = $.fn.calendar.settings;
         // gets language and week-start
         var  language = options.language,
              weekStart = options.weekStart;
 
-        var panel = $('#jq-date-picker').find('.cal-weeks'),
+        var panel = $('#jq-date-picker').find('#picker-' + pickerId).find('.cal-weeks'),
             weeksData = weeks[language + 'Short'];
         weekStart--;
 
@@ -118,8 +180,9 @@
 
     /**
      * Sets current year and month for calendar
+     * @param pickerId id of per picker instance
      */
-    var renderYearMonth = function() {
+    var renderYearMonth = function(pickerId) {
         var yearAndMonth = format.call(current);
         $('.cal-year-month').text(yearAndMonth);
     };
