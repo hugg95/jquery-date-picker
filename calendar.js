@@ -13,7 +13,7 @@
 		language: 'cn', // ['cn', 'en']
 		mode: 'single', // ['single', 'range']
         weekStart: '7', // [1, 2, 3, 4, 5, 6]
-        theme: 'normal',
+        theme: 'normal'
 	};
 
     // the html structure of date-picker
