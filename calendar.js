@@ -93,7 +93,7 @@
 
         picker.append(header).append(body).append(footer);
 
-        if (!num) var num = 1;
+        if (!num) num = 1;
         for (var i = 0; i < num; i++) {
             var picker = picker.attr('id', 'picker-' + i);
             container.append(picker.clone());
@@ -158,21 +158,21 @@
         var options = $.fn.calendar.settings,
             cells = $('#picker-' + pickerId).find('.cal-per-date');
         cells.text('').removeClass('has-date');
-    	var firstDayInMonth = getFirstDayInMonth(current),
-    		datesInMonth = getDatesInMonth(current);
+    	var firstDayOfMonth = getFirstDayOfMonth(current),
+    		datesOfMonth = getDatesOfMonth(current);
 
         var weekStart = options.weekStart;
         var firstDate;
-        if (firstDayInMonth < weekStart) {
-            firstDate = firstDayInMonth - weekStart + 7;
+        if (firstDayOfMonth < weekStart) {
+            firstDate = firstDayOfMonth - weekStart + 7;
         } else {
-            firstDate = firstDayInMonth - weekStart
+            firstDate = firstDayOfMonth - weekStart
         }
 
     	var firstFillCells = $('#picker-' + pickerId).find('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
             last,
             curr = new Date(current);
-    	for (var i = 1; i <= datesInMonth; i++) {
+    	for (var i = 1; i <= datesOfMonth; i++) {
             if (firstFillCells[i - 1]) {
                 curr.setDate(i);
                 var dataDate = format.call(curr);
@@ -184,13 +184,13 @@
         var lastCellIndex = cells.index($('.cal-per-date:last'));
 
         // render the rest dates
-        if (last < datesInMonth) {
-            var times = datesInMonth - last > 7 ? 2 : 1;
+        if (last < datesOfMonth) {
+            var times = datesOfMonth - last > 7 ? 2 : 1;
             for (var i = 0; i < times; i++) {
                 createSingleContainer(pickerId);
             }
             var lastFillCells = $('.cal-per-date:gt(' + lastCellIndex + ')');
-            var rest = datesInMonth - last;
+            var rest = datesOfMonth - last;
             for (var i = 0; i < rest; i++) {
                 if (lastFillCells[i]) {
                     curr.setDate(last + i + 1);
@@ -201,13 +201,13 @@
         }
     };
 
-    var getFirstDayInMonth = function(date) {
+    var getFirstDayOfMonth = function(date) {
     	var temp = new Date(date);
     	temp.setDate(0);
     	return temp.getDay() + 1;
     };
 
-    var getDatesInMonth = function(date) {
+    var getDatesOfMonth = function(date) {
     	var currMonth = date.getMonth() + 1,
     		dateOfNextMonth = new Date(date);
     		dateOfNextMonth.setMonth(currMonth);
