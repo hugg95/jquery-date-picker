@@ -189,7 +189,7 @@
             for (var i = 0; i < times; i++) {
                 createSingleContainer(pickerId);
             }
-            var lastFillCells = $('.cal-per-date:gt(' + lastCellIndex + ')');
+            var lastFillCells = $('#picker-' + pickerId).find('.cal-per-date:gt(' + lastCellIndex + ')');
             var rest = datesOfMonth - last;
             for (var i = 0; i < rest; i++) {
                 if (lastFillCells[i]) {
