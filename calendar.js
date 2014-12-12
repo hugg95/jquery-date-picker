@@ -107,7 +107,7 @@
         $(container).html(structure);
 
         for (var i = 0; i < pickersNum; i++) {
-            renderYearMonth(i);
+            renderYearMonth();
             renderWeeks(i);
             for (var j = 0; j < 4; j++) {
                 createSingleContainer(i);
@@ -182,7 +182,7 @@
      * Sets current year and month for calendar
      * @param pickerId id of per picker instance
      */
-    var renderYearMonth = function(pickerId) {
+    var renderYearMonth = function(pickerId) {console.log(pickerId);
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
                 var yearMonth = format.call(date[i].curr);
@@ -262,7 +262,6 @@
      */
     var nextMonth = function(pickerId) {
         var i = pickerId;
-        console.log(date[i]);
         if (date[i].currMonth < 12) {
             date[i].currMonth++;
         } else {
@@ -276,15 +275,16 @@
     /**
      * Go to the previous month
      */
-    var prevMonth = function() {
-        if (currMonth > 1) {
-            currMonth--;
+    var prevMonth = function(pickerId) {
+        var i = pickerId;
+        if (date[i].currMonth > 1) {
+            date[i].currMonth--;
         } else {
-            currMonth = 12;
-            currYear--;
+            date[i].currMonth = 12;
+            date[i].currYear--;
         }
-        current.setFullYear(currYear);
-        current.setMonth(currMonth - 1);
+        date[i].curr.setFullYear(date[i].currYear);
+        date[i].curr.setMonth(date[i].currMonth - 1);
     };
 
     var format = function(format) {
@@ -343,7 +343,6 @@
             f: function(target) {
                 var id = $(target).closest('.per-picker').attr('data-id');
                 nextMonth(id);
-                init();
                 renderYearMonth(id);
                 renderCells(id);
             }
@@ -351,22 +350,22 @@
         {
             t: '.prev',
             e: 'click',
-            f: function() {
-                prevMonth();
-                init();
-                renderYearMonth();
-                renderCells();
+            f: function(target) {
+                var id = $(target).closest('.per-picker').attr('data-id');
+                prevMonth(id);
+                renderYearMonth(id);
+                renderCells(id);
             }
         }
     ];
 
-    for (var i = 0; i < events.length; i++) {
-        addListener(events[i].t, events[i].e, events[i].f);
-    }
-
     $.fn.calendar = function(options) {
         $.fn.calendar.settings = $.extend(defaults, options);
         init();
+
+        for (var i = 0; i < events.length; i++) {
+            addListener(events[i].t, events[i].e, events[i].f);
+        }
     };
 
  })(jQuery);
