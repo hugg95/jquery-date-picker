@@ -46,23 +46,26 @@
     	cnLong: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
     };
 
-    // Sets the default current date is now
-    var current = new Date(),
-    	currYear = current.getFullYear(),
-    	currMonth = current.getMonth() + 1,
-    	currDate = current.getDate();
-
     // default pickers count is 1, language is English, container is 'body' element
     var pickersNum = 1,
         language = 'en',
-        container = 'body';
-
-    //for (false) {
-        //
-    //}
+        container = 'body',
+        date = [];
 
     var generateDates = function() {
-        var options = $.fn.calendar.settings;
+        var curr =  new Date(),
+            currYear = curr.getFullYear(),
+            currMonth = curr.getMonth() + 1,
+            currDate = curr.getDate();
+
+        date.push({curr: curr, currYear: currYear, currMonth: currMonth, currDate: currDate});
+
+        for (var i = 1; i < pickersNum + 1; i++) {
+            var curr = new Date(),
+                tempMonth = currMonth + i;
+            curr.setMonth(tempMonth - 1);
+            date.push({curr: curr, currYear: currYear, currMonth: currMonth, currDate: currDate});
+        }
 
     };
 
@@ -70,10 +73,10 @@
      * parse calendar's setting
      */
     var parseSetting = function() {
-        var setting = $.fn.calendar.settings,
-            __container = setting.container,
-            __mode = setting.mode,
-            __language = setting.language;
+        var __setting = $.fn.calendar.settings,
+            __container = __setting.container,
+            __mode = __setting.mode,
+            __language = __setting.language;
 
         switch (__mode) {
             case 'single': pickersNum = 1; break;
@@ -94,7 +97,11 @@
      * Render the calendar
      */
     var init = function() {
+
+        // parse settings
         parseSetting();
+
+        generateDates();
 
         var structure = assembleStructure(pickersNum);
         $(container).html(structure);
@@ -124,7 +131,7 @@
 
         if (!num) num = 1;
         for (var i = 0; i < num; i++) {
-            var picker = picker.attr('id', 'picker-' + i);
+            var picker = picker.attr('id', 'picker-' + i).attr('data-id', i);
             container.append(picker.clone());
         }
 
@@ -176,8 +183,15 @@
      * @param pickerId id of per picker instance
      */
     var renderYearMonth = function(pickerId) {
-        var yearAndMonth = format.call(current);
-        $('#picker-' + pickerId).find('.cal-year-month').text(yearAndMonth);
+        if (typeof pickerId === 'undefined') {
+            for (var i = 0; i < pickersNum; i++) {
+                var yearMonth = format.call(date[i].curr);
+                $('#picker-' + i).find('.cal-year-month').text(yearMonth);
+            }
+        } else {
+            var yearMonth = format.call(date[pickerId].curr);
+            $('#picker-' + pickerId).find('.cal-year-month').text(yearMonth);
+        }
     };
 
     /**
@@ -187,8 +201,8 @@
         var options = $.fn.calendar.settings,
             cells = $('#picker-' + pickerId).find('.cal-per-date');
         cells.text('').removeClass('has-date');
-    	var firstDayOfMonth = getFirstDayOfMonth(current),
-    		datesOfMonth = getDatesOfMonth(current);
+    	var firstDayOfMonth = getFirstDayOfMonth(date[pickerId].curr),
+    		datesOfMonth = getDatesOfMonth(date[pickerId].curr);
 
         var weekStart = options.weekStart;
         var firstDate;
@@ -200,7 +214,7 @@
 
     	var firstFillCells = $('#picker-' + pickerId).find('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
             last,
-            curr = new Date(current);
+            curr = new Date(date[pickerId].curr);
     	for (var i = 1; i <= datesOfMonth; i++) {
             if (firstFillCells[i - 1]) {
                 curr.setDate(i);
@@ -246,15 +260,17 @@
     /**
      * Go to the next month
      */
-    var nextMonth = function() {
-        if (currMonth < 12) {
-            currMonth++;
+    var nextMonth = function(pickerId) {
+        var i = pickerId;
+        console.log(date[i]);
+        if (date[i].currMonth < 12) {
+            date[i].currMonth++;
         } else {
-            currMonth = 1;
-            currYear++;
+            date[i].currMonth = 1;
+            date[i].currYear++;
         }
-        current.setFullYear(currYear);
-        current.setMonth(currMonth - 1);
+        date[i].curr.setFullYear(date[i].currYear);
+        date[i].curr.setMonth(date[i].currMonth - 1);
     };
 
     /**
@@ -314,7 +330,8 @@
     var addListener = function(target, event, fn) {
         $('body').on(event, target, function() {
             if (typeof fn === 'function') {
-                fn();
+                var that = this;
+                fn(that);
             }
         });
     };
@@ -323,11 +340,12 @@
         {
             t: '.next',
             e: 'click',
-            f: function() {
-                nextMonth();
+            f: function(target) {
+                var id = $(target).closest('.per-picker').attr('data-id');
+                nextMonth(id);
                 init();
-                renderYearMonth();
-                renderCells();
+                renderYearMonth(id);
+                renderCells(id);
             }
         },
         {
