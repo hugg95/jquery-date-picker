@@ -12,7 +12,8 @@
 		container: 'body',
 		language: 'cn', // ['cn', 'en']
 		mode: 'single', // ['single', 'range']
-        weekStart: '7', // [1, 2, 3, 4, 5, 6]
+        pickersNum: 1,
+        weekStart: 7, // [1, 2, 3, 4, 5, 6]
         theme: 'normal'
 	};
 
@@ -51,21 +52,49 @@
     	currMonth = current.getMonth() + 1,
     	currDate = current.getDate();
 
+    // default pickers count is 1, language is English, container is 'body' element
+    var pickersNum = 1,
+        language = 'en',
+        container = 'body';
+
+    //for (false) {
+        //
+    //}
+
+    var generateDates = function() {
+        var options = $.fn.calendar.settings;
+
+    };
+
     /**
-     * Render the calendar
+     * parse calendar's setting
      */
-    var init = function() {
-        // set options for global use
-        var options = $.fn.calendar.settings,
-    	    container = options.container,
-            mode = options.mode,
-    		language = options.language;
-        var pickersNum = 1;
-        switch (mode) {
+    var parseSetting = function() {
+        var setting = $.fn.calendar.settings,
+            __container = setting.container,
+            __mode = setting.mode,
+            __language = setting.language;
+
+        switch (__mode) {
             case 'single': pickersNum = 1; break;
             case 'range': pickersNum = 2; break;
             default: pickersNum = 1; break;
         }
+
+        switch (__language) {
+            case 'cn': language = 'cn'; break;
+            case 'en': language = 'en'; break;
+            default: language = 'en'; break;
+        }
+
+        container = __container ? __container : container;
+    };
+
+    /**
+     * Render the calendar
+     */
+    var init = function() {
+        parseSetting();
 
         var structure = assembleStructure(pickersNum);
         $(container).html(structure);
