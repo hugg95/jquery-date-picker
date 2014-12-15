@@ -60,11 +60,17 @@
 
         date.push({curr: curr, currYear: currYear, currMonth: currMonth, currDate: currDate});
 
-        for (var i = 1; i < pickersNum + 1; i++) {
-            var curr = new Date(),
-                tempMonth = currMonth + i;
-            curr.setMonth(tempMonth - 1);
-            date.push({curr: curr, currYear: currYear, currMonth: currMonth, currDate: currDate});
+        for (var i = 1; i < pickersNum; i++) {
+            var next = new Date(),
+                nextYear = currYear,
+                nextMonth = currMonth + i,
+                nextDate = currDate;
+            nextYear = nextMonth > 12 ? nextYear + 1 : nextYear;
+            nextMonth = nextMonth > 12 ? nextMonth - 12 : nextMonth;
+            next.setFullYear(nextYear);
+            next.setMonth(nextMonth - 1);
+            next.setDate(nextDate);
+            date.push({curr: next, currYear: nextYear, currMonth: nextMonth, currDate: nextDate});
         }
 
     };
@@ -185,7 +191,7 @@
      * Sets current year and month for calendar
      * @param pickerId id of per picker instance
      */
-    var renderYearMonth = function(pickerId) {console.log(pickerId);
+    var renderYearMonth = function(pickerId) {
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
                 var yearMonth = format.call(date[i].curr);
