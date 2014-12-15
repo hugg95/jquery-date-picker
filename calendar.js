@@ -26,6 +26,7 @@
         footer: ''
     };
 
+    // container's default id is 'jq-date-picker'
     structure.container = '<div id="jq-date-picker" class="cal-style"></div>';
     structure.picker = '<div class="per-picker"></div>';
     structure.header = '<div class="cal-header">' +
@@ -53,6 +54,9 @@
         prefix = '',
         date = [];
 
+    /**
+     * generates dates for each date-picker
+     */
     var generateDates = function() {
         var curr =  new Date(),
             currYear = curr.getFullYear(),
@@ -71,6 +75,7 @@
             next.setFullYear(nextYear);
             next.setMonth(nextMonth - 1);
             next.setDate(nextDate);
+
             date.push({curr: next, currYear: nextYear, currMonth: nextMonth, currDate: nextDate});
         }
 
@@ -102,7 +107,7 @@
     };
 
     /**
-     * Render the calendar
+     * render the calendar
      */
     var init = function() {
 
@@ -121,7 +126,7 @@
     };
 
     /**
-     * Assemble the structure of date-picker
+     * assemble the structure of date-picker
      * @param num how many date-pickers will be generated
      */
     var assembleStructure = function(num) {
@@ -147,7 +152,7 @@
     };
 
     /**
-     * Render the structure of date-picker
+     * render the structure of date-picker
      */
     var renderStructure = function() {
         $(container).html(assembleStructure(pickersNum));
@@ -169,7 +174,7 @@
     };
 
     /**
-     * Render weeks
+     * render weeks
      * @param pickerId  id of per picker instance
      */
     var renderWeeks = function(pickerId) {
@@ -196,7 +201,7 @@
     };
 
     /**
-     * Sets current year and month for calendar
+     * sets current year and month for each date-picker
      * @param pickerId id of per picker instance
      */
     var renderYearMonth = function(pickerId) {
@@ -212,7 +217,8 @@
     };
 
     /**
-     * Fills cells with dates
+     * fills cells with dates for each date-picker
+     * @param pickerId id of per picker instance
      */
     var renderCells = function(pickerId) {
         var options = $.fn.calendar.settings,
@@ -322,23 +328,17 @@
 
     	switch (format) {
     		case 'yyyy/mm/dd':
-                formatted = o.y + '/' + o.m + '/' + o.d;
-                break;
+                formatted = o.y + '/' + o.m + '/' + o.d; break;
             case 'yyyy-mm-dd':
-                formatted = o.y + '-' + o.m + '-' + o.d;
-                break;
+                formatted = o.y + '-' + o.m + '-' + o.d; break;
             case 'yyyy/mm/dd hh:mm:ss':
-                formatted = o.y + '/' + o.m + '/' + o.d + ' ' + o.hh + ':' + o.mm + ':' + o.ss;
-                break;
+                formatted = o.y + '/' + o.m + '/' + o.d + ' ' + o.hh + ':' + o.mm + ':' + o.ss; break;
             case 'yyyy-mm-dd hh:mm:ss':
-                formatted = o.y + '/' + o.m + '/' + o.d + ' ' + o.hh + ':' + o.mm + ':' + o.ss;
-                break;
+                formatted = o.y + '/' + o.m + '/' + o.d + ' ' + o.hh + ':' + o.mm + ':' + o.ss; break;
             case 'hh:mm:ss':
-                 formatted = o.hh + ':' + o.mm + ':' + o.ss;
-                 break;
-             default:
-                 formatted = o.y + '/' + o.m + '/' + o.d;
-                 break;
+                 formatted = o.hh + ':' + o.mm + ':' + o.ss; break;
+            default:
+                 formatted = o.y + '/' + o.m + '/' + o.d; break;
     	}
 
         return formatted;
@@ -354,6 +354,7 @@
         });
     };
 
+    // events array of calendar
     var events = [
         {
             t: '.next',
