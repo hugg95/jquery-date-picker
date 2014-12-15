@@ -4,65 +4,11 @@
     	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <title>Calendar demo</title>
         <link href="../calendar.css" rel="stylesheet" type="text/css">
-        <style>
-
-        </style>
     </head>
-    <body>
-    <!-- <div id="demo" style="width:500px;height:500px;"></div> -->
-    <!--div id="jq-date-picker" class="cal-style">
-    <div class="per-picker">
-        <div class="cal-header">
-            <div class="cal-info"><span class="prev"><span class="prev-icon"></span></span><span class="cal-year-month">2014/11/14</span><span class="next"><span class="next-icon"></span></span>
-            </div>
-            <div class="cal-weeks"><span class="cal-day">日</span><span class="cal-day">一</span><span class="cal-day">二</span><span class="cal-day">三</span><span class="cal-day">四</span><span class="cal-day">五</span><span class="cal-day">六</span>
-            </div>
-        </div>
-        <div class="cal-body">
-            <div class="cal-per-week"><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date has-date" data-date="2014/11/1">1</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/2">2</span><span class="cal-per-date has-date" data-date="2014/11/3">3</span><span class="cal-per-date has-date" data-date="2014/11/4">4</span><span class="cal-per-date has-date" data-date="2014/11/5">5</span><span class="cal-per-date has-date" data-date="2014/11/6">6</span><span class="cal-per-date has-date" data-date="2014/11/7">7</span><span class="cal-per-date has-date" data-date="2014/11/8">8</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/9">9</span><span class="cal-per-date has-date" data-date="2014/11/10">10</span><span class="cal-per-date has-date" data-date="2014/11/11">11</span><span class="cal-per-date has-date" data-date="2014/11/12">12</span><span class="cal-per-date has-date" data-date="2014/11/13">13</span><span class="cal-per-date has-date" data-date="2014/11/14">14</span><span class="cal-per-date has-date" data-date="2014/11/15">15</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/16">16</span><span class="cal-per-date has-date" data-date="2014/11/17">17</span><span class="cal-per-date has-date" data-date="2014/11/18">18</span><span class="cal-per-date has-date" data-date="2014/11/19">19</span><span class="cal-per-date has-date" data-date="2014/11/20">20</span><span class="cal-per-date has-date" data-date="2014/11/21">21</span><span class="cal-per-date has-date" data-date="2014/11/22">22</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/23">23</span><span class="cal-per-date has-date" data-date="2014/11/24">24</span><span class="cal-per-date has-date" data-date="2014/11/25">25</span><span class="cal-per-date has-date" data-date="2014/11/26">26</span><span class="cal-per-date has-date" data-date="2014/11/27">27</span><span class="cal-per-date has-date" data-date="2014/11/28">28</span><span class="cal-per-date has-date" data-date="2014/11/29">29</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/30">30</span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span>
-            </div>
-        </div>
-        <div class="cal-footer"></div>
-    </div>
-    <div class="per-picker">
-        <div class="cal-header">
-            <div class="cal-info"><span class="prev"><span class="prev-icon"></span></span><span class="cal-year-month">2014/11/14</span><span class="next"><span class="next-icon"></span></span>
-            </div>
-            <div class="cal-weeks"><span class="cal-day">日</span><span class="cal-day">一</span><span class="cal-day">二</span><span class="cal-day">三</span><span class="cal-day">四</span><span class="cal-day">五</span><span class="cal-day">六</span>
-            </div>
-        </div>
-        <div class="cal-body">
-            <div class="cal-per-week"><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date has-date" data-date="2014/11/1">1</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/2">2</span><span class="cal-per-date has-date" data-date="2014/11/3">3</span><span class="cal-per-date has-date" data-date="2014/11/4">4</span><span class="cal-per-date has-date" data-date="2014/11/5">5</span><span class="cal-per-date has-date" data-date="2014/11/6">6</span><span class="cal-per-date has-date" data-date="2014/11/7">7</span><span class="cal-per-date has-date" data-date="2014/11/8">8</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/9">9</span><span class="cal-per-date has-date" data-date="2014/11/10">10</span><span class="cal-per-date has-date" data-date="2014/11/11">11</span><span class="cal-per-date has-date" data-date="2014/11/12">12</span><span class="cal-per-date has-date" data-date="2014/11/13">13</span><span class="cal-per-date has-date" data-date="2014/11/14">14</span><span class="cal-per-date has-date" data-date="2014/11/15">15</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/16">16</span><span class="cal-per-date has-date" data-date="2014/11/17">17</span><span class="cal-per-date has-date" data-date="2014/11/18">18</span><span class="cal-per-date has-date" data-date="2014/11/19">19</span><span class="cal-per-date has-date" data-date="2014/11/20">20</span><span class="cal-per-date has-date" data-date="2014/11/21">21</span><span class="cal-per-date has-date" data-date="2014/11/22">22</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/23">23</span><span class="cal-per-date has-date" data-date="2014/11/24">24</span><span class="cal-per-date has-date" data-date="2014/11/25">25</span><span class="cal-per-date has-date" data-date="2014/11/26">26</span><span class="cal-per-date has-date" data-date="2014/11/27">27</span><span class="cal-per-date has-date" data-date="2014/11/28">28</span><span class="cal-per-date has-date" data-date="2014/11/29">29</span>
-            </div>
-            <div class="cal-per-week"><span class="cal-per-date has-date" data-date="2014/11/30">30</span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span><span class="cal-per-date"></span>
-            </div>
-        </div>
-        <div class="cal-footer"></div>
-    </div>
-</div-->
-
-    </body>
+    <body></body>
     <script type="text/javascript" src="jquery-1.11.1.js"></script>
     <script type="text/javascript" src="../calendar.js"></script>
     <script type="text/javascript">
-$('#demo').calendar({mode: 'range', language: 'en', prefix: 'ff'});
+        $('#demo').calendar({mode: 'range', language: 'en', prefix: 'ff'});
     </script>
 </html>
