@@ -12,8 +12,8 @@
 		container: 'body',
 		language: 'cn', // ['cn', 'en']
 		mode: 'single', // ['single', 'range']
-        pickersNum: 1,
-        weekStart: 7, // [1, 2, 3, 4, 5, 6]
+        weekStart: 7,   // [1, 2, 3, 4, 5, 6]
+        prefix: '',
         theme: 'normal'
 	};
 
@@ -50,6 +50,7 @@
     var pickersNum = 1,
         language = 'en',
         container = 'body',
+        prefix = '',
         date = [];
 
     var generateDates = function() {
@@ -96,6 +97,7 @@
             default: language = 'en'; break;
         }
 
+        prefix = __setting.prefix;
         container = __container ? __container : container;
     };
 
@@ -137,6 +139,10 @@
             container.append(picker.clone());
         }
 
+        if (prefix) {
+            container.attr('id', prefix + '-date-picker');
+        }
+
         return container;
     };
 
@@ -152,7 +158,8 @@
      * @param pickerId id of picker instance
      */
     var createSingleContainer = function(pickerId) {
-        var panel = $('#jq-date-picker').find('#picker-' + pickerId).find('.cal-body'),
+        var id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
+            panel = $('#' + id).find('#picker-' + pickerId).find('.cal-body'),
             container = $('<div class="cal-per-week"></div>');
         for (var i = 0; i < 7; i++) {
             var perDate = $('<span class="cal-per-date"></span>');
@@ -171,7 +178,8 @@
         var  language = options.language,
              weekStart = options.weekStart;
 
-        var panel = $('#jq-date-picker').find('#picker-' + pickerId).find('.cal-weeks'),
+        var id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
+            panel = $('#' + id).find('#picker-' + pickerId).find('.cal-weeks'),
             weeksData = weeks[language + 'Short'];
         weekStart--;
 

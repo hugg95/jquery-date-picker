@@ -4,14 +4,10 @@ span {
     padding: 0;
 }
 
-#jq-date-picker {
+.cal-style {
     position: absolute;
     border: 1px solid #04477c;
     border-radius: 3px;
-}
-
-.cal-style {
-    font-family: 'Microsoft Yahei';
     font-size: 0;
 }
 
