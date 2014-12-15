@@ -1,7 +1,7 @@
 /**
  * A customizable date picker based on jQuery.
  * @author Victor Li lncwwn@gmail.com
- * @version 1.0
+ * @version 0.1
  * Released under terms of the MIT lincense.
  */
 
@@ -98,13 +98,9 @@
      */
     var init = function() {
 
-        // parse settings
         parseSetting();
-
         generateDates();
-
-        var structure = assembleStructure(pickersNum);
-        $(container).html(structure);
+        renderStructure();
 
         for (var i = 0; i < pickersNum; i++) {
             renderYearMonth();
@@ -136,6 +132,13 @@
         }
 
         return container;
+    };
+
+    /**
+     * Render the structure of date-picker
+     */
+    var renderStructure = function() {
+        $(container).html(assembleStructure(pickersNum));
     };
 
     /**
@@ -323,6 +326,7 @@
                  formatted = o.y + '/' + o.m + '/' + o.d;
                  break;
     	}
+
         return formatted;
 
     };
