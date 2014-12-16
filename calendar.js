@@ -327,16 +327,6 @@
             mm: this.getMinutes(),
             ss: this.getSeconds()
         };
-        var seperator = {
-            en: {slash: '/', dash: '-', colon: ':'},
-            ch: {y: '年', m: '月', d: '日', h: '时', m: '分', s: '秒'}
-        };
-
-        if (!format) {
-            if (language) {
-                
-            }
-        }
 
     	var formatted;
 
