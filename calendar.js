@@ -49,7 +49,8 @@
     };
 
     // default pickers count is 1, language is English, container is 'body' element
-    var pickersNum = 1,
+    var mode = 'single',
+        pickersNum = 1,
         language = 'en',
         container = 'body',
         weekStart = 1,
@@ -105,6 +106,7 @@
             default: language = 'en'; break;
         }
 
+        mode = __setting.mode;
         weekStart = __setting.weekStart;
         prefix = __setting.prefix;
         format = __setting.format;
@@ -379,11 +381,34 @@
                 renderYearMonth(id);
                 renderCells(id);
             }
+        },
+        {
+            t: '.cal-per-date.has-date',
+            e: 'click',
+            f: function(target) {
+                var id = $(target).closest('.per-picker').attr('data-id');
+                if ('single' === mode) {
+                    $.fn.calendar.selected = $(target).attr('data-date');
+                } else if ('range' === mode) {
+                    var marked = ++$.fn.calendar.marked;
+                    if (marked % 2) {
+                        $.fn.calendar.first = $(target).attr('data-date');
+                    } else {
+                        $.fn.calendar.last = $(target).attr('data-date');
+                    }
+                    if (2 === $.fn.calendar.marked) {
+                        $.fn.calendar.marked = 0;
+                    }
+                }
+            }
         }
     ];
 
     $.fn.calendar = function(options) {
         $.fn.calendar.settings = $.extend(defaults, options);
+        $.fn.calendar.first = '';
+        $.fn.calendar.last = '';
+        $.fn.calendar.marked = 0;
         init();
 
         for (var i = 0; i < events.length; i++) {
