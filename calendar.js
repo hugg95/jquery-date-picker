@@ -13,6 +13,7 @@
 		language: 'cn', // ['cn', 'en']
 		mode: 'single', // ['single', 'range']
         weekStart: 7,   // [1, 2, 3, 4, 5, 6]
+        format: '',
         prefix: '',
         theme: 'normal'
 	};
@@ -51,7 +52,9 @@
     var pickersNum = 1,
         language = 'en',
         container = 'body',
+        weekStart = 1,
         prefix = '',
+        format = '',
         date = [];
 
     /**
@@ -102,7 +105,9 @@
             default: language = 'en'; break;
         }
 
+        weekStart = __setting.weekStart;
         prefix = __setting.prefix;
+        format = __setting.format;
         container = __container ? __container : container;
     };
 
@@ -178,23 +183,19 @@
      * @param pickerId  id of per picker instance
      */
     var renderWeeks = function(pickerId) {
-        var options = $.fn.calendar.settings;
-        // gets language and week-start
-        var  language = options.language,
-             weekStart = options.weekStart;
-
-        var id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
+        var __weekStart = weekStart,
+            id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
             panel = $('#' + id).find('#picker-' + pickerId).find('.cal-weeks'),
             weeksData = weeks[language + 'Short'];
-        weekStart--;
+        __weekStart--;
 
         var firstDay = $('<span class="cal-day"></span>');
-        $(panel[0]).append(firstDay.text(weeksData[weekStart]));
-        for (var i = 1; i < weeks[language + 'Short'].length - weekStart; i++) {
+        $(panel[0]).append(firstDay.text(weeksData[__weekStart]));
+        for (var i = 1; i < weeks[language + 'Short'].length - __weekStart; i++) {
             var perDay = $('<span class="cal-day"></span>');
-            panel.append(perDay.text(weeks[language + 'Short'][i + weekStart]));
+            panel.append(perDay.text(weeks[language + 'Short'][i + __weekStart]));
         }
-        for (var i = 0; i < weekStart; i++) {
+        for (var i = 0; i < __weekStart; i++) {
             var perDay = $('<span class="cal-day"></span>');
             panel.append(perDay.text(weeks[language + 'Short'][i]));
         }
@@ -207,11 +208,11 @@
     var renderYearMonth = function(pickerId) {
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
-                var yearMonth = format.call(date[i].curr);
+                var yearMonth = formatDate.call(date[i].curr, format);
                 $('#picker-' + i).find('.cal-year-month').text(yearMonth);
             }
         } else {
-            var yearMonth = format.call(date[pickerId].curr);
+            var yearMonth = formatDate.call(date[pickerId].curr, format);
             $('#picker-' + pickerId).find('.cal-year-month').text(yearMonth);
         }
     };
@@ -221,15 +222,14 @@
      * @param pickerId id of per picker instance
      */
     var renderCells = function(pickerId) {
-        var options = $.fn.calendar.settings,
+        var __weekStart = weekStart,
             cells = $('#picker-' + pickerId).find('.cal-per-date');
         cells.text('').removeClass('has-date');
     	var firstDayOfMonth = getFirstDayOfMonth(date[pickerId].curr),
     		datesOfMonth = getDatesOfMonth(date[pickerId].curr);
 
-        var weekStart = options.weekStart;
         var firstDate;
-        if (firstDayOfMonth < weekStart) {
+        if (firstDayOfMonth < __weekStart) {
             firstDate = firstDayOfMonth - weekStart + 7;
         } else {
             firstDate = firstDayOfMonth - weekStart
@@ -241,7 +241,7 @@
     	for (var i = 1; i <= datesOfMonth; i++) {
             if (firstFillCells[i - 1]) {
                 curr.setDate(i);
-                var dataDate = format.call(curr);
+                var dataDate = formatDate.call(curr, format);
                 $(firstFillCells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
                 last = i;
             }
@@ -260,7 +260,7 @@
             for (var i = 0; i < rest; i++) {
                 if (lastFillCells[i]) {
                     curr.setDate(last + i + 1);
-                    var dataDate = format.call(curr);
+                    var dataDate = formatDate.call(curr, format);
                     $(lastFillCells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
                 }
             }
@@ -314,7 +314,7 @@
      * format date
      * @param format date format
      */
-    var format = function(format) {
+    var formatDate = function(format) {
     	if (!this instanceof Date) {
     		return;
     	}
@@ -327,6 +327,16 @@
             mm: this.getMinutes(),
             ss: this.getSeconds()
         };
+        var seperator = {
+            en: {slash: '/', dash: '-', colon: ':'},
+            ch: {y: '年', m: '月', d: '日', h: '时', m: '分', s: '秒'}
+        };
+
+        if (!format) {
+            if (language) {
+                
+            }
+        }
 
     	var formatted;
 
