@@ -107,7 +107,7 @@
     };
 
     /**
-     * render the calendar
+     * after the initial operation, the whole date-picker will be available
      */
     var init = function() {
 
@@ -310,6 +310,10 @@
         date[i].curr.setMonth(date[i].currMonth - 1);
     };
 
+    /**
+     * format date
+     * @param format date format
+     */
     var format = function(format) {
     	if (!this instanceof Date) {
     		return;
