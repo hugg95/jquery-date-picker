@@ -94,10 +94,14 @@
             __mode = __setting.mode,
             __language = __setting.language;
 
-        switch (__mode) {
-            case 'single': pickersNum = 1; break;
-            case 'range': pickersNum = 2; break;
-            default: pickersNum = 1; break;
+        if (typeof __setting.pickersNum === 'undefined') {
+            switch (__mode) {
+                case 'single': pickersNum = 1; break;
+                case 'range': pickersNum = 2; break;
+                default: pickersNum = 1; break;
+            }
+        } else {
+            pickersNum = __setting.pickersNum || 1;
         }
 
         switch (__language) {
