@@ -55,7 +55,7 @@
         container = 'body',
         weekStart = 1,
         prefix = '',
-        format = '',
+        format = 'yyyy/mm/dd',
         date = [];
 
     /**
@@ -122,8 +122,6 @@
      */
     var init = function() {
 
-        parseSetting();
-        generateDates();
         renderStructure();
 
         for (var i = 0; i < pickersNum; i++) {
@@ -132,7 +130,6 @@
             for (var j = 0; j < 4; j++) {
                 createSingleContainer(i);
             }
-            renderCells(i);
         }
     };
 
@@ -175,7 +172,7 @@
      */
     var createSingleContainer = function(pickerId) {
         var id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
-            panel = $('#' + id).find('#picker-' + pickerId).find('.cal-body'),
+            panel = $('#' + id).find('#picker-' + pickerId + ' .cal-body'),
             container = $('<div class="cal-per-week"></div>');
         for (var i = 0; i < 7; i++) {
             var perDate = $('<span class="cal-per-date"></span>');
@@ -227,7 +224,7 @@
      * fills cells with dates for each date-picker
      * @param pickerId id of per picker instance
      */
-    var renderCells = function(pickerId) {
+    var fillCells = function(pickerId) {
         var __weekStart = weekStart,
             cells = $('#picker-' + pickerId).find('.cal-per-date');
         cells.text('').removeClass('has-date');
@@ -253,7 +250,7 @@
             }
     	}
 
-        var lastCellIndex = cells.index($('.cal-per-date:last'));
+        var lastCellIndex = cells.index($('#picker-' + pickerId + ' .cal-per-date:last'));
 
         // render the rest dates
         if (last < datesOfMonth) {
@@ -372,8 +369,9 @@
             f: function(target) {
                 var id = $(target).closest('.per-picker').attr('data-id');
                 nextMonth(id);
+                renderStructure();
                 renderYearMonth(id);
-                renderCells(id);
+                fillCells(id);
             }
         },
         {
@@ -383,7 +381,7 @@
                 var id = $(target).closest('.per-picker').attr('data-id');
                 prevMonth(id);
                 renderYearMonth(id);
-                renderCells(id);
+                fillCells(id);
             }
         },
         {
@@ -413,7 +411,12 @@
         $.fn.calendar.first = '';
         $.fn.calendar.last = '';
         $.fn.calendar.marked = 0;
+        parseSetting();
+        generateDates();
         init();
+        for(var i = 0; i < pickersNum; i++) {
+            fillCells(i);
+        }
 
         for (var i = 0; i < events.length; i++) {
             addListener(events[i].t, events[i].e, events[i].f);
