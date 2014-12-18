@@ -130,6 +130,7 @@
             for (var j = 0; j < 4; j++) {
                 createSingleContainer(i);
             }
+            fillCells(i);
         }
     };
 
@@ -369,7 +370,7 @@
             f: function(target) {
                 var id = $(target).closest('.per-picker').attr('data-id');
                 nextMonth(id);
-                renderStructure();
+                init();
                 renderYearMonth(id);
                 fillCells(id);
             }
@@ -380,6 +381,7 @@
             f: function(target) {
                 var id = $(target).closest('.per-picker').attr('data-id');
                 prevMonth(id);
+                init();
                 renderYearMonth(id);
                 fillCells(id);
             }
@@ -414,9 +416,6 @@
         parseSetting();
         generateDates();
         init();
-        for(var i = 0; i < pickersNum; i++) {
-            fillCells(i);
-        }
 
         for (var i = 0; i < events.length; i++) {
             addListener(events[i].t, events[i].e, events[i].f);
