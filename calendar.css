@@ -9,12 +9,14 @@ span {
     border: 1px solid #c0c0c0;
     border-radius: 2px;
     font-size: 0;
+    background-color: #f6f7f8;
     box-shadow: 0 0 10px #939699;
 }
 
 .per-picker {
     float: left;
     border: 1px solid #c0c0c0;
+    background-color: #fff;
 }
 
 .per-picker:nth-child(2n) {
