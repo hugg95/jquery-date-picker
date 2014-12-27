@@ -1,5 +1,5 @@
 /**
- * A customizable date picker based on jQuery.
+ * A customizable date-picker based on jQuery.
  * @author Victor Li lncwwn@gmail.com
  * @version 0.1
  * Released under terms of the MIT lincense.
@@ -15,7 +15,7 @@
         weekStart: 7,   // [1, 2, 3, 4, 5, 6]
         format: '',
         prefix: '',
-        theme: 'normal'
+        theme: 'simple' // ['simple', 'ocean']
 	};
 
     // the html structure of date-picker
@@ -89,7 +89,7 @@
      * parse calendar's setting
      */
     var parseSetting = function() {
-        var __setting = $.fn.calendar.settings,
+        var __setting = $.fn.datepicker.settings,
             __container = __setting.container,
             __mode = __setting.mode,
             __language = __setting.language;
@@ -392,27 +392,35 @@
             f: function(target) {
                 var id = $(target).closest('.per-picker').attr('data-id');
                 if ('single' === mode) {
-                    $.fn.calendar.selected = $(target).attr('data-date');
+                    selected = $(target).attr('data-date');
                 } else if ('range' === mode) {
-                    var marked = ++$.fn.calendar.marked;
-                    if (marked % 2) {
-                        $.fn.calendar.first = $(target).attr('data-date');
+                    var __marked = ++marked;
+                    if (__marked % 2) {
+                        first = $(target).attr('data-date');
                     } else {
-                        $.fn.calendar.last = $(target).attr('data-date');
+                        last = $(target).attr('data-date');
                     }
-                    if (2 === $.fn.calendar.marked) {
-                        $.fn.calendar.marked = 0;
+                    if (2 === marked) {
+                        marked = 0;
                     }
                 }
             }
         }
     ];
 
-    $.fn.calendar = function(options) {
-        $.fn.calendar.settings = $.extend(defaults, options);
-        $.fn.calendar.first = '';
-        $.fn.calendar.last = '';
-        $.fn.calendar.marked = 0;
+    /*---------------  API defined below  -------------------*/
+    var datepicker = {};
+    var selected, marked, first, last;
+    datepicker.getSelectedDates = function() {
+        console.log(first);
+        console.log(last);
+    };
+
+    $.fn.datepicker = function(options) {
+        $.fn.datepicker.settings = $.extend(defaults, options);
+        $.fn.datepicker.first = '';
+        $.fn.datepicker.last = '';
+        $.fn.datepicker.marked = 0;
         parseSetting();
         generateDates();
         init();
@@ -420,6 +428,8 @@
         for (var i = 0; i < events.length; i++) {
             addListener(events[i].t, events[i].e, events[i].f);
         }
+
+        return datepicker;
     };
 
  })(jQuery);
