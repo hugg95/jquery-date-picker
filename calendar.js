@@ -410,17 +410,24 @@
 
     /*---------------  API defined below  -------------------*/
     var datepicker = {};
-    var selected, marked, first, last;
+
+    var selected, marked = 0, first, last;
+
+    /**
+     * return the selected dates
+     * if the current mode is 'single', return the last selected date,
+     * if the current mode is 'range', return the selected dates array.
+     */
     datepicker.getSelectedDates = function() {
-        console.log(first);
-        console.log(last);
+        if ('single' === mode) {
+            return last;
+        } else if ('range' === mode) {
+            return [first, last];
+        }
     };
 
     $.fn.datepicker = function(options) {
         $.fn.datepicker.settings = $.extend(defaults, options);
-        $.fn.datepicker.first = '';
-        $.fn.datepicker.last = '';
-        $.fn.datepicker.marked = 0;
         parseSetting();
         generateDates();
         init();
