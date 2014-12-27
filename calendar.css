@@ -14,14 +14,15 @@ span {
 
 .per-picker {
     float: left;
+    border: 1px solid #c0c0c0;
 }
 
 .per-picker:nth-child(2n) {
-    border-left: 1px solid #c0c0c0;
+    margin: 0 3px 3px;
 }
 
-.cal-header {
-    
+.per-picker:last-child {
+    margin-right: 0;
 }
 
 .cal-info {
@@ -80,7 +81,7 @@ span {
     display: inline-block;
     width: 33px;
     height: 25px;
-    border-width: 0px 0 0 1px;
+    border-width: 0 0 0 1px;
     border-style: solid;
     border-color: #c0c0c0;
     text-align: center;
@@ -92,10 +93,6 @@ span {
 
 .cal-per-date:first-child {
     border-left: 0;
-}
-
-.cal-per-date:nth-child(n) {
-    /*border-left: 0;*/
 }
 
 .has-date:hover {
