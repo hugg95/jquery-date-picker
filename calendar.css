@@ -20,7 +20,7 @@ span {
 }
 
 .per-picker:nth-child(2n) {
-    margin: 0 3px 3px;
+    margin: 0 3px;
 }
 
 .per-picker:last-child {
@@ -79,6 +79,12 @@ span {
     vertical-align: top;
 }
 
+.today {
+    background-color: #53c2e6;
+    color: #fff;
+    border: 1px solid #53c2e6;
+}
+
 .cal-per-date {
     display: inline-block;
     width: 33px;
@@ -99,6 +105,10 @@ span {
 
 .has-date:hover {
     background-color: #f0f0f0;
+}
+
+.today:hover {
+    background-color: #19b5e8;
 }
 
 .prev,

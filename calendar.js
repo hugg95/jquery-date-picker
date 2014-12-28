@@ -212,12 +212,48 @@
     var renderYearMonth = function(pickerId) {
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
-                var yearMonth = formatDate.call(date[i].curr, format);
+                var yearMonth = formatter.call(date[i].curr, format);
                 $('#picker-' + i).find('.cal-year-month').text(yearMonth);
             }
         } else {
-            var yearMonth = formatDate.call(date[pickerId].curr, format);
+            var yearMonth = formatter.call(date[pickerId].curr, format);
             $('#picker-' + pickerId).find('.cal-year-month').text(yearMonth);
+        }
+    };
+
+    /**
+     * find today and hightlight it in date-pickers
+     */
+    var highlightToday = function() {
+        var __today = new Date(),
+            __fToday = formatter.call(__today, format);
+            __year = __today.getFullYear(),
+            __month = __today.getMonth() + 1,
+            __date = __today.getDate(),
+            __ids = [],
+            __pickers = [];
+
+        // find pickers' id of current year and current month
+        for (var i = 0; i < date.length; i++) {
+            var _date = date[i];
+            if (_date.currYear === __year && _date.currMonth === __month) {
+                __ids.push(i);
+            }
+        }
+
+        // select pickers of current year and current month
+        for (var i = 0; i < __ids.length; i++) {
+            __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date.has-date'));
+        }
+
+        // find today and make it highlight
+        for (var i = 0; i < __pickers.length; i++) {
+            var len = __pickers[i].length;
+            for (var j = 0; j < len; j++) {
+                if ($(__pickers[i][j]).attr('data-date') === __fToday) {
+                    $(__pickers[i][j]).addClass('today');
+                }
+            }
         }
     };
 
@@ -245,7 +281,7 @@
     	for (var i = 1; i <= datesOfMonth; i++) {
             if (firstFillCells[i - 1]) {
                 curr.setDate(i);
-                var dataDate = formatDate.call(curr, format);
+                var dataDate = formatter.call(curr, format);
                 $(firstFillCells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
                 last = i;
             }
@@ -264,7 +300,7 @@
             for (var i = 0; i < rest; i++) {
                 if (lastFillCells[i]) {
                     curr.setDate(last + i + 1);
-                    var dataDate = formatDate.call(curr, format);
+                    var dataDate = formatter.call(curr, format);
                     $(lastFillCells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
                 }
             }
@@ -318,7 +354,7 @@
      * format date
      * @param format date format
      */
-    var formatDate = function(format) {
+    var formatter = function(format) {
     	if (!this instanceof Date) {
     		return;
     	}
@@ -373,6 +409,7 @@
                 init();
                 renderYearMonth(id);
                 fillCells(id);
+                highlightToday();
             }
         },
         {
@@ -384,6 +421,7 @@
                 init();
                 renderYearMonth(id);
                 fillCells(id);
+                highlightToday();
             }
         },
         {
@@ -432,7 +470,9 @@
         parseSetting();
         generateDates();
         init();
+        highlightToday();
 
+        // starts events listener
         for (var i = 0; i < events.length; i++) {
             addListener(events[i].t, events[i].e, events[i].f);
         }
