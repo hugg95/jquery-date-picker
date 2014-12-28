@@ -9,5 +9,6 @@ This is a [jQuery](http://jquery.com/) plugin to provide date selection  capabil
 
 Snapshots
 ===========
-[range mode](http://img01.taobaocdn.com/imgextra/i1/855442686/TB2Rv3EbpXXXXX9XXXXXXXXXXXX_!!855442686.png)   
-you can also generates any number of pickers:[](http://img03.taobaocdn.com/imgextra/i3/855442686/TB27OZybpXXXXcJXXXXXXXXXXXX_!!855442686.png)
+__range mode:__
+<img  src="http://img01.taobaocdn.com/imgextra/i1/855442686/TB2Rv3EbpXXXXX9XXXXXXXXXXXX_!!855442686.png"></img>
+you can also generates any number of pickers:<img src="http://img03.taobaocdn.com/imgextra/i3/855442686/TB27OZybpXXXXcJXXXXXXXXXXXX_!!855442686.png"></img>
