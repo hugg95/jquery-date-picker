@@ -263,7 +263,7 @@
      * if the current mode is 'range',
      * make the current dates in range highlight
      * @param first the first date of range
-     * @param lastt the last date of range
+     * @param last the last date of range
      */
     var highlightRange = function(first, last) {
         var __first = new Date(first),
@@ -286,6 +286,22 @@
                 __ids.push(i);
             }
         }
+
+        for (var i = 0; i < __ids.length; i++) {
+            __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date.has-date'));
+        }
+
+        console.log(firstIndex);
+
+        for (var i = 0; i < __pickers.length; i++) {
+            var len = __pickers[i].length;
+            for (var j = 0; j < len; j++) {
+                if ($(__pickers[i][j]).attr('')) {
+                    //
+                }
+            }
+        }
+
     };
 
     /**
@@ -489,6 +505,7 @@
                             $(__dates[i]).removeClass('range-last');
                         }
                         last = $(target).addClass('range-last').attr('data-date');
+                        highlightRange(first, last);
                     }
                     if (2 === marked) {
                         marked = 0;
@@ -508,7 +525,7 @@
      */
     datepicker.getDate = function() {
         if ('range' === mode)
-            throw new Error('the current mode is range, use getRange() instead');
+            throw new Error('the current mode is \'range\', use getRange() instead');
         return selected;
     };
 
@@ -517,7 +534,7 @@
      */
     datepicker.getRange = function() {
         if ('single' === mode)
-            throw new Error('the current mode is single, use getDate() instead');
+            throw new Error('the current mode is \'single\', use getDate() instead');
         return [first, last];
     };
 
