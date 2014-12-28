@@ -424,6 +424,7 @@
         } else if ('range' === mode) {
             return [first, last];
         }
+        return [first, last];
     };
 
     $.fn.datepicker = function(options) {
