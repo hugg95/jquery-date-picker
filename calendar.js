@@ -282,26 +282,23 @@
         for (var i = 0; i < date.length; i++) {
             var _date = date[i];
             if ((_date.currYear === __fYear || _date.currYear === __lYear)
-                    && (_date.currMonth === __fMonth || _date.currMonth === _lMonth)) {
+                    && (_date.currMonth === __fMonth || _date.currMonth === __lMonth)) {
                 __ids.push(i);
             }
         }
-
         for (var i = 0; i < __ids.length; i++) {
             __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date.has-date'));
         }
-
-        console.log(firstIndex);
-
         for (var i = 0; i < __pickers.length; i++) {
             var len = __pickers[i].length;
             for (var j = 0; j < len; j++) {
-                if ($(__pickers[i][j]).attr('')) {
-                    //
+                var __date = new Date($(__pickers[i][j]).attr('data-date'));
+                if (__date.getTime() >= __first.getTime() &&
+                        __date.getTime() <= __last.getTime()) {
+                    $(__pickers[i][j]).addClass('in-range');
                 }
             }
         }
-
     };
 
     /**
@@ -502,7 +499,7 @@
                         var __dates = $('.cal-per-date.has-date'),
                             __len = __dates.length;
                         for (var i = 0; i < __len; i++) {
-                            $(__dates[i]).removeClass('range-last');
+                            $(__dates[i]).removeClass('range-last, in-range');
                         }
                         last = $(target).addClass('range-last').attr('data-date');
                         highlightRange(first, last);

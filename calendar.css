@@ -90,6 +90,11 @@ span {
     color: #fff;
 }
 
+.in-range {
+    background-color: #52bf94;
+    color: #fff;
+}
+
 .cal-per-date {
     display: inline-block;
     width: 33px;
@@ -113,6 +118,10 @@ span {
 }
 
 .selected:hover {
+    background-color: #3c9a75;
+}
+
+.in-range:hover {
     background-color: #3c9a75;
 }
 
