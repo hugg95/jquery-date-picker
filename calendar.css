@@ -85,6 +85,11 @@ span {
     border: 1px solid #53c2e6;
 }
 
+.selected {
+    background-color: #52bf94;
+    color: #fff;
+}
+
 .cal-per-date {
     display: inline-block;
     width: 33px;
@@ -105,6 +110,10 @@ span {
 
 .has-date:hover {
     background-color: #f0f0f0;
+}
+
+.selected:hover {
+    background-color: #3c9a75;
 }
 
 .today:hover {

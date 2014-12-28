@@ -222,14 +222,16 @@
     };
 
     /**
-     * find today and hightlight it in date-pickers
+     * find the specified date and make it hightlight
+     * @param specifiedDate the specified date to make it highlight
+     * @param className the class name of highlight
      */
-    var highlightToday = function() {
-        var __today = new Date(),
-            __fToday = formatter.call(__today, format);
-            __year = __today.getFullYear(),
-            __month = __today.getMonth() + 1,
-            __date = __today.getDate(),
+    var highlightDate = function(specifiedDate, className) {
+        var __specifiedDate = specifiedDate ? new Date(specifiedDate) : new Date(),
+            __fDate = formatter.call(__specifiedDate, format);
+            __year = __specifiedDate.getFullYear(),
+            __month = __specifiedDate.getMonth() + 1,
+            __date = __specifiedDate.getDate(),
             __ids = [],
             __pickers = [];
 
@@ -250,9 +252,38 @@
         for (var i = 0; i < __pickers.length; i++) {
             var len = __pickers[i].length;
             for (var j = 0; j < len; j++) {
-                if ($(__pickers[i][j]).attr('data-date') === __fToday) {
-                    $(__pickers[i][j]).addClass('today');
+                if ($(__pickers[i][j]).attr('data-date') === __fDate) {
+                    $(__pickers[i][j]).addClass(className);
                 }
+            }
+        }
+    };
+
+    /**
+     * if the current mode is 'range',
+     * make the current dates in range highlight
+     * @param first the first date of range
+     * @param lastt the last date of range
+     */
+    var highlightRange = function(first, last) {
+        var __first = new Date(first),
+            __last = new Date(last),
+            __fFirstDate = formatter.call(__first, format),
+            __fLastDate = formatter.call(__last, format),
+            __fYear = __first.getFullYear(),
+            __fMonth = __first.getMonth() + 1,
+            __fDate = __first.getDate(),
+            __lYear = __last.getFullYear(),
+            __lMonth = __last.getMonth() + 1,
+            __lDate = __last.getDate(),
+            __ids = [],
+            __pickers = [];
+
+        for (var i = 0; i < date.length; i++) {
+            var _date = date[i];
+            if ((_date.currYear === __fYear || _date.currYear === __lYear)
+                    && (_date.currMonth === __fMonth || _date.currMonth === _lMonth)) {
+                __ids.push(i);
             }
         }
     };
@@ -409,7 +440,8 @@
                 init();
                 renderYearMonth(id);
                 fillCells(id);
-                highlightToday();
+                highlightDate(undefined, 'today');
+                highlightDate(selected, 'selected');
             }
         },
         {
@@ -421,22 +453,42 @@
                 init();
                 renderYearMonth(id);
                 fillCells(id);
-                highlightToday();
+                highlightDate(undefined, 'today');
+                highlightDate(selected, 'selected');
             }
         },
         {
             t: '.cal-per-date.has-date',
             e: 'click',
             f: function(target) {
-                var id = $(target).closest('.per-picker').attr('data-id');
+                var __picker = $(target).closest('.per-picker'),
+                    __id = __picker.attr('data-id');
                 if ('single' === mode) {
-                    selected = $(target).attr('data-date');
+                    selected = $(target).addClass('selected').attr('data-date');
+                    var __dates = $('.cal-per-date.has-date'),
+                        __len = __dates.length;
+                    // remove class 'selected' of all from each date pickers
+                    for (var i = 0; i < __len; i++) {
+                        $(__dates[i]).removeClass('selected');
+                    }
+                    // add class 'selected' on current date
+                    selected = $(target).addClass('selected').attr('data-date');
                 } else if ('range' === mode) {
                     var __marked = ++marked;
                     if (__marked % 2) {
-                        first = $(target).attr('data-date');
+                        var __dates = $('.cal-per-date.has-date'),
+                            __len = __dates.length;
+                        for (var i = 0; i < __len; i++) {
+                            $(__dates[i]).removeClass('range-first');
+                        }
+                        first = $(target).addClass('range-first').attr('data-date');
                     } else {
-                        last = $(target).attr('data-date');
+                        var __dates = $('.cal-per-date.has-date'),
+                            __len = __dates.length;
+                        for (var i = 0; i < __len; i++) {
+                            $(__dates[i]).removeClass('range-last');
+                        }
+                        last = $(target).addClass('range-last').attr('data-date');
                     }
                     if (2 === marked) {
                         marked = 0;
@@ -452,16 +504,20 @@
     var selected, marked = 0, first, last;
 
     /**
-     * return the selected dates
-     * if the current mode is 'single', return the last selected date,
-     * if the current mode is 'range', return the selected dates array.
+     * return the selected date, only support in single mode
      */
-    datepicker.getSelectedDates = function() {
-        if ('single' === mode) {
-            return last;
-        } else if ('range' === mode) {
-            return [first, last];
-        }
+    datepicker.getDate = function() {
+        if ('range' === mode)
+            throw new Error('the current mode is range, use getRange() instead');
+        return selected;
+    };
+
+    /**
+     * return the selected date range, only support in range mode
+     */
+    datepicker.getRange = function() {
+        if ('single' === mode)
+            throw new Error('the current mode is single, use getDate() instead');
         return [first, last];
     };
 
@@ -470,7 +526,7 @@
         parseSetting();
         generateDates();
         init();
-        highlightToday();
+        highlightDate(undefined, 'today');
 
         // starts events listener
         for (var i = 0; i < events.length; i++) {
