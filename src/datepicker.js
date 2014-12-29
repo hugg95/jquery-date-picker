@@ -64,23 +64,21 @@
     var generateDates = function() {
         var curr =  new Date(),
             currYear = curr.getFullYear(),
-            currMonth = curr.getMonth() + 1,
-            currDate = curr.getDate();
+            currMonth = curr.getMonth() + 1;
 
-        date.push({curr: curr, currYear: currYear, currMonth: currMonth, currDate: currDate});
+        date.push({curr: curr, currYear: currYear, currMonth: currMonth});
 
         for (var i = 1; i < pickersNum; i++) {
             var next = new Date(),
                 nextYear = currYear,
-                nextMonth = currMonth + i,
-                nextDate = currDate;
+                nextMonth = currMonth + i;
+            next.setDate(1); // to fix month overflow
             nextYear = nextMonth > 12 ? nextYear + 1 : nextYear;
             nextMonth = nextMonth > 12 ? nextMonth - 12 : nextMonth;
             next.setFullYear(nextYear);
             next.setMonth(nextMonth - 1);
-            next.setDate(nextDate);
 
-            date.push({curr: next, currYear: nextYear, currMonth: nextMonth, currDate: nextDate});
+            date.push({curr: next, currYear: nextYear, currMonth: nextMonth});
         }
 
     };
@@ -123,9 +121,9 @@
     var init = function() {
 
         renderStructure();
+        renderYearMonth();
 
         for (var i = 0; i < pickersNum; i++) {
-            renderYearMonth();
             renderWeeks(i);
             for (var j = 0; j < 4; j++) {
                 createSingleContainer(i);
@@ -274,6 +272,7 @@
             __lYear = __last.getFullYear(),
             __lMonth = __last.getMonth() + 1,
             __lDate = __last.getDate(),
+            __firstAndLast = [],
             __ids = [],
             __pickers = [];
 
@@ -281,12 +280,18 @@
             var _date = date[i];
             if ((_date.currYear === __fYear || _date.currYear === __lYear)
                     && (_date.currMonth === __fMonth || _date.currMonth === __lMonth)) {
-                __ids.push(i);
+                __firstAndLast.push(i);
             }
         }
+
+        for (var i = __firstAndLast[0]; i <= __firstAndLast[1]; i++) {
+            __ids.push(i);
+        }
+
         for (var i = 0; i < __ids.length; i++) {
             __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date.has-date'));
         }
+
         for (var i = 0; i < __pickers.length; i++) {
             var len = __pickers[i].length;
             for (var j = 0; j < len; j++) {
@@ -411,8 +416,12 @@
     	var formatted;
 
     	switch (format) {
+            case 'yyyy/mm':
+                formatted = o.y + '/' + o.m; break;
     		case 'yyyy/mm/dd':
                 formatted = o.y + '/' + o.m + '/' + o.d; break;
+            case 'yyyy-mm':
+                formatted = o.y + '-' + o.m; break;
             case 'yyyy-mm-dd':
                 formatted = o.y + '-' + o.m + '-' + o.d; break;
             case 'yyyy/mm/dd hh:mm:ss':

@@ -8,6 +8,7 @@ span {
     position: absolute;
     border: 1px solid #c0c0c0;
     border-radius: 2px;
+    font-family: 'Arial';
     font-size: 0;
     background-color: #f6f7f8;
     box-shadow: 0 0 10px #939699;
@@ -28,7 +29,7 @@ span {
 }
 
 .cal-info {
-    height: 30px;
+    height: 26px;
 }
 
 .cal-weeks {
@@ -37,13 +38,13 @@ span {
 
 .cal-day {
     display: inline-block;
-    width: 33px;
-    height: 25px;
+    width: 28px;
+    height: 23px;
     border-color: #c0c0c0;
     border-width: 1px 0 0 1px;
     border-style: solid;
     text-align: center;
-    line-height: 25px;
+    line-height: 23px;
     font-size: 12px;
 }
 
@@ -61,7 +62,7 @@ span {
 }
 
 .cal-per-week {
-    height: 25px;
+    height: 23px;
     border-bottom: 1px solid #c0c0c0;
 }
 
@@ -75,7 +76,7 @@ span {
 
 .has-date {
     font-size: 12px;
-    line-height: 25px;
+    line-height: 23px;
     vertical-align: top;
 }
 
@@ -97,8 +98,8 @@ span {
 
 .cal-per-date {
     display: inline-block;
-    width: 33px;
-    height: 25px;
+    width: 28px;
+    height: 23px;
     border-width: 0 0 0 1px;
     border-style: solid;
     border-color: #c0c0c0;
@@ -134,7 +135,7 @@ span {
     display: inline-block;
     position: relative;
     width: 20%;
-    height: 30px;
+    height: 26px;
     cursor: pointer;
 }
 
@@ -145,7 +146,7 @@ span {
     display: inline-block;
     position: relative;
     background-repeat: no-repeat;
-    top: 8px;
+    top: 5px;
 }
 
 .prev-icon {
@@ -160,7 +161,7 @@ span {
 }
 
 .next-icon {
-    left: 27px;
+    left: 20px;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAANwAAADcBYx2BhQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAACXSURBVDiNY/z//z8DJYCJIt34DNDSslA1kTbhItuA/3/+O33hYd5MyBCcBly/dXImAyPjZkKG4A2DGzdOTCBkCMFAJGQIUbGAzxCio5GFhWkRAwOD0lcuFhsUcWI06+hYCf35/XcHA+P/muu3T+4iyQVImifeuHFqKbo8XgMIacZrADGa8Rrw59ffTEKaGRgYGBgHPDcCABdQUv1H1kZ3AAAAAElFTkSuQmCC);
     /*background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAANwAAADcBYx2BhQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAD2SURBVDiNpdNPLkNRFIDxX6kNiD28u4O7DYkQxJD6G5EYmiExFiQNNWqDEIltdAft3JAVIDXwJFf72j7c0Tlfcr97zs05lV6v5z+n2g9CFvewjyYOOt32yBcq/RWELL5iOk8bqI2STBSw+yReRT1ksfIbwQ7ukryGi2GSAUGn2/7ACh4SvImzshV8S5bxmODtkMXTUoJc8o4lPCV4N2TxuJQgl7z5auclwYulBSGLU2hhJsHNUoKQxSpuMZvgOg7HCkIWJ3GDuQRfYqt/qAYE+eUW5hN8hY2iiSyq4NzPj2pgfdg4FwkWkvjaH3bhCM84wdq4bfwEQF5N6PfVbuAAAAAASUVORK5CYII=) no-repeat;*/
 }
@@ -172,10 +173,10 @@ span {
 
 .cal-year-month {
     width: 60%;
-    height: 30px;
+    height: 26px;
     display: inline-block;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 26px;
     text-align: center;
     vertical-align: top;
 }
