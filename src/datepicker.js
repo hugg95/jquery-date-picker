@@ -1,7 +1,7 @@
 /**
  * A customizable date-picker based on jQuery.
  * @author Victor Li lncwwn@gmail.com
- * @version 0.1
+ * @version 1.0.0
  * Released under terms of the MIT lincense.
  */
 
@@ -19,7 +19,7 @@
 	};
 
     // the html structure of date-picker
-    var structure = {
+    var _structure = {
         container: '',
         picker: '',
         header: '',
@@ -28,9 +28,9 @@
     };
 
     // container's default id is 'jq-date-picker'
-    structure.container = '<div id="jq-date-picker" class="cal-style"></div>';
-    structure.picker = '<div class="per-picker"></div>';
-    structure.header = '<div class="cal-header">' +
+    _structure.container = '<div id="jq-date-picker" class="cal-style"></div>';
+    _structure.picker = '<div class="per-picker"></div>';
+    _structure.header = '<div class="cal-header">' +
                             '<div class="cal-info">' +
                                 '<span class="prev"><span class="prev-icon"></span></span>' +
                                 '<span class="cal-year-month"></span>' +
@@ -38,8 +38,8 @@
                             '</div>' +
                             '<div class="cal-weeks"></div>' +
                         '</div>';
-    structure.body = '<div class="cal-body"></div>';
-    structure.footer = '<div class="cal-footer"></div>';
+    _structure.body = '<div class="cal-body"></div>';
+    _structure.footer = '<div class="cal-footer"></div>';
 
     var weeks = {
     	enShort: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
@@ -139,11 +139,11 @@
      * @param num how many date-pickers will be generated
      */
     var assembleStructure = function(num) {
-        var container = $(structure.container),
-            picker = $(structure.picker),
-            header = $(structure.header),
-            body = $(structure.body),
-            footer = $(structure.footer);
+        var container = $(_structure.container),
+            picker = $(_structure.picker),
+            header = $(_structure.header),
+            body = $(_structure.body),
+            footer = $(_structure.footer);
 
         picker.append(header).append(body).append(footer);
 
@@ -529,6 +529,8 @@
             throw new Error('the current mode is \'single\', use getDate() instead');
         return [first, last];
     };
+
+    /*---------------- API defined end  ---------------------*/
 
     $.fn.datepicker = function(options) {
         $.fn.datepicker.settings = $.extend(defaults, options);
