@@ -5,7 +5,7 @@
  * Released under terms of the MIT lincense.
  */
 
-(function($) {
+(function($, undefined) {
 
     // default setting
 	var defaults = {
@@ -153,9 +153,7 @@
             container.append(picker.clone());
         }
 
-        if (prefix) {
-            container.attr('id', prefix + '-date-picker');
-        }
+        if (prefix) container.attr('id', prefix + '-date-picker');
 
         return container;
     };
@@ -399,9 +397,7 @@
      * @param format date format
      */
     var formatter = function(format) {
-    	if (!this instanceof Date) {
-    		return;
-    	}
+    	if (!this instanceof Date) return;
 
         var o = {
             y: this.getFullYear(),
@@ -504,9 +500,8 @@
                         last = $(target).addClass('range-last').attr('data-date');
                         highlightRange(first, last);
                     }
-                    if (2 === marked) {
-                        marked = 0;
-                    }
+
+                    if (2 === marked) marked = 0;
                 }
             }
         }
