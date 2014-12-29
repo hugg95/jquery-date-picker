@@ -284,12 +284,11 @@
             }
         }
 
-        for (var i = __firstAndLast[0]; i <= __firstAndLast[1]; i++) {
+        for (var i = __firstAndLast[0]; i <= __firstAndLast[__firstAndLast.length - 1]; i++)
             __ids.push(i);
-        }
 
         for (var i = 0; i < __ids.length; i++) {
-            __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date.has-date'));
+            __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date'));
         }
 
         for (var i = 0; i < __pickers.length; i++) {
@@ -494,19 +493,27 @@
                 } else if ('range' === mode) {
                     var __marked = ++marked;
                     if (__marked % 2) {
-                        var __dates = $('.cal-per-date.has-date'),
+                        var __dates = $('.cal-per-date'),
                             __len = __dates.length;
                         for (var i = 0; i < __len; i++) {
                             $(__dates[i]).removeClass('range-first');
                         }
                         first = $(target).addClass('range-first').attr('data-date');
                     } else {
-                        var __dates = $('.cal-per-date.has-date'),
+                        var __dates = $('.cal-per-date'),
                             __len = __dates.length;
                         for (var i = 0; i < __len; i++) {
-                            $(__dates[i]).removeClass('range-last, in-range');
+                            $(__dates[i]).removeClass('range-last').removeClass('in-range');
                         }
                         last = $(target).addClass('range-last').attr('data-date');
+                        if (new Date(first).getTime() > new Date(last).getTime()) {
+                            var __firstRange = $('.range-first'),
+                                __lastRange = $('.range-last');
+                            __firstRange.removeClass('range-first').addClass('range-last');
+                            __lastRange.removeClass('range-last').addClass('range-first');
+                            first = $('.range-first').attr('data-date');
+                            last = $('.range-last').attr('data-date');
+                        }
                         highlightRange(first, last);
                     }
 
