@@ -377,6 +377,7 @@
             date[i].currMonth = 1;
             date[i].currYear++;
         }
+        date[i].curr.setDate(1); // fix the month overflow bug
         date[i].curr.setFullYear(date[i].currYear);
         date[i].curr.setMonth(date[i].currMonth - 1);
     };
@@ -392,6 +393,7 @@
             date[i].currMonth = 12;
             date[i].currYear--;
         }
+        date[i].curr.setDate(1); // fix the month pverflow bug
         date[i].curr.setFullYear(date[i].currYear);
         date[i].curr.setMonth(date[i].currMonth - 1);
     };
@@ -458,6 +460,7 @@
                 renderYearMonth(id);
                 fillCells(id);
                 highlightDate(undefined, 'today');
+                if (selected)
                 highlightDate(selected, 'selected');
             }
         },
@@ -471,6 +474,7 @@
                 renderYearMonth(id);
                 fillCells(id);
                 highlightDate(undefined, 'today');
+                if (selected)
                 highlightDate(selected, 'selected');
             }
         },
@@ -481,13 +485,11 @@
                 var __picker = $(target).closest('.per-picker'),
                     __id = __picker.attr('data-id');
                 if ('single' === mode) {
-                    selected = $(target).addClass('selected').attr('data-date');
                     var __dates = $('.cal-per-date.has-date'),
                         __len = __dates.length;
                     // remove class 'selected' of all from each date pickers
-                    for (var i = 0; i < __len; i++) {
-                        $(__dates[i]).removeClass('selected');
-                    }
+                    for (var i = 0; i < __len; i++)
+                    $(__dates[i]).removeClass('selected');
                     // add class 'selected' on current date
                     selected = $(target).addClass('selected').attr('data-date');
                 } else if ('range' === mode) {
@@ -495,16 +497,14 @@
                     if (__marked % 2) {
                         var __dates = $('.cal-per-date'),
                             __len = __dates.length;
-                        for (var i = 0; i < __len; i++) {
+                        for (var i = 0; i < __len; i++)
                             $(__dates[i]).removeClass('range-first');
-                        }
                         first = $(target).addClass('range-first').attr('data-date');
                     } else {
                         var __dates = $('.cal-per-date'),
                             __len = __dates.length;
-                        for (var i = 0; i < __len; i++) {
-                            $(__dates[i]).removeClass('range-last').removeClass('in-range');
-                        }
+                        for (var i = 0; i < __len; i++)
+                        $(__dates[i]).removeClass('range-last').removeClass('in-range');
                         last = $(target).addClass('range-last').attr('data-date');
                         if (new Date(first).getTime() > new Date(last).getTime()) {
                             var __firstRange = $('.range-first'),
