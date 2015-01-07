@@ -506,6 +506,7 @@
                         for (var i = 0; i < __len; i++)
                         $(__dates[i]).removeClass('range-last').removeClass('in-range');
                         last = $(target).addClass('range-last').attr('data-date');
+                        // FIXME
                         if (new Date(first).getTime() > new Date(last).getTime()) {
                             var __firstRange = $('.range-first'),
                                 __lastRange = $('.range-last');
