@@ -25,3 +25,4 @@ TODO
 5. provide a usage tutorial and a demo page.
 6. provide a new theme.
 7. provide a tutorial of customizing own theme for user.
+8. refine the formatter function.
