@@ -6,21 +6,22 @@
         <link href="../src/datepicker.css" rel="stylesheet" type="text/css">
     </head>
     <body></body>
-    <script type="text/javascript" src="jquery-1.11.1.js"></script>
-    <script type="text/javascript" src="../src/datepicker.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../src/datepicker.js"></script>
     <script type="text/javascript">
         var config = {
-            container: '#demo', // optional, default is 'body'
+            container: 'body', // optional, default is 'body'
             mode: 'range', // optional, default is 'single'
-            pickersNum: 2, // optional, if it is not passed, it will be 1 in single mode and 2 in range mode
-            language: 'en', // optional, default is 'cn', only supports 'en' and 'cn' now
+            pickersNum: 6, // optional, if it is not passed, it will be 1 in single mode and 2 in range mode
+            language: 'cn', // optional, default is 'cn', only supports 'en' and 'cn' now
             prefix: 'demo', // optional, default is an empty character, this value will be prepended to date-picker's id
-            format: 'yyyy-mm-dd', // optional, default is 'yyyy/mm/dd'
+            format: 'YYYY-MM-DD', // optional, default is 'YYYY/MM/DD'
             weekStart: 1, // optional, this option will specify the start day of week
             theme: 'simple' // optional, default is 'simple', we will provide another theme soon
         };
 
-        var datepicker = $('#demo').datepicker(config);
+        var datepicker = $('body').datepicker(config);
 
     </script>
 </html>

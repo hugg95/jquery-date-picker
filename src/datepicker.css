@@ -15,17 +15,18 @@ span {
 }
 
 .per-picker {
+    margin: 3px;
     float: left;
     border: 1px solid #c0c0c0;
     background-color: #fff;
 }
 
 .per-picker:nth-child(2n) {
-    margin: 0 3px;
+    margin: 3px 0;
 }
 
 .per-picker:last-child {
-    margin-right: 0;
+    margin-right: 3px;
 }
 
 .cal-info {

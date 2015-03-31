@@ -1,3 +1,4 @@
 *.swp
 tags
 node_modules
+bower_components

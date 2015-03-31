@@ -5,6 +5,8 @@
  * Released under terms of the MIT lincense.
  */
 
+'use strict';
+
 (function($, undefined) {
 
     // default setting
@@ -208,11 +210,11 @@
     var renderYearMonth = function(pickerId) {
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
-                var yearMonth = formatter.call(date[i].curr, format);
+                var yearMonth = formatter(date[i].curr, format);
                 $('#picker-' + i).find('.cal-year-month').text(yearMonth);
             }
         } else {
-            var yearMonth = formatter.call(date[pickerId].curr, format);
+            var yearMonth = formatter(date[pickerId].curr, format);
             $('#picker-' + pickerId).find('.cal-year-month').text(yearMonth);
         }
     };
@@ -224,7 +226,7 @@
      */
     var highlightDate = function(specifiedDate, className) {
         var __specifiedDate = specifiedDate ? new Date(specifiedDate) : new Date(),
-            __fDate = formatter.call(__specifiedDate, format);
+            __fDate = formatter(__specifiedDate, format),
             __year = __specifiedDate.getFullYear(),
             __month = __specifiedDate.getMonth() + 1,
             __date = __specifiedDate.getDate(),
@@ -264,8 +266,8 @@
     var highlightRange = function(first, last) {
         var __first = new Date(first),
             __last = new Date(last),
-            __fFirstDate = formatter.call(__first, format),
-            __fLastDate = formatter.call(__last, format),
+            __fFirstDate = formatter(__first, format),
+            __fLastDate = formatter(__last, format),
             __fYear = __first.getFullYear(),
             __fMonth = __first.getMonth() + 1,
             __fDate = __first.getDate(),
@@ -327,7 +329,7 @@
     	for (var i = 1; i <= datesOfMonth; i++) {
             if (firstFillCells[i - 1]) {
                 curr.setDate(i);
-                var dataDate = formatter.call(curr, format);
+                var dataDate = formatter(curr, format);
                 $(firstFillCells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
                 last = i;
             }
@@ -346,7 +348,7 @@
             for (var i = 0; i < rest; i++) {
                 if (lastFillCells[i]) {
                     curr.setDate(last + i + 1);
-                    var dataDate = formatter.call(curr, format);
+                    var dataDate = formatter(curr, format);
                     $(lastFillCells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
                 }
             }
@@ -402,41 +404,8 @@
      * format date
      * @param format date format
      */
-    var formatter = function(format) {
-    	if (!this instanceof Date) return;
-
-        var o = {
-            y: this.getFullYear(),
-            m: this.getMonth() + 1,
-            d: this.getDate(),
-            hh: this.getHours(),
-            mm: this.getMinutes(),
-            ss: this.getSeconds()
-        };
-
-    	var formatted;
-
-    	switch (format) {
-            case 'yyyy/mm':
-                formatted = o.y + '/' + o.m; break;
-    		case 'yyyy/mm/dd':
-                formatted = o.y + '/' + o.m + '/' + o.d; break;
-            case 'yyyy-mm':
-                formatted = o.y + '-' + o.m; break;
-            case 'yyyy-mm-dd':
-                formatted = o.y + '-' + o.m + '-' + o.d; break;
-            case 'yyyy/mm/dd hh:mm:ss':
-                formatted = o.y + '/' + o.m + '/' + o.d + ' ' + o.hh + ':' + o.mm + ':' + o.ss; break;
-            case 'yyyy-mm-dd hh:mm:ss':
-                formatted = o.y + '/' + o.m + '/' + o.d + ' ' + o.hh + ':' + o.mm + ':' + o.ss; break;
-            case 'hh:mm:ss':
-                 formatted = o.hh + ':' + o.mm + ':' + o.ss; break;
-            default:
-                 formatted = o.y + '/' + o.m + '/' + o.d; break;
-    	}
-
-        return formatted;
-
+    var formatter = function(date, format) {
+    	return moment(date).format(format);
     };
 
     var addListener = function(target, event, fn) {
