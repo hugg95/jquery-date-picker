@@ -5,9 +5,9 @@
  * Released under terms of the MIT lincense.
  */
 
-'use strict';
+;(function($, undefined) {
 
-(function($, undefined) {
+    'use strict';
 
     // default setting
 	var defaults = {
@@ -21,7 +21,7 @@
 	};
 
     // the html structure of date-picker
-    var _structure = {
+    var structure = {
         container: '',
         picker: '',
         header: '',
@@ -30,9 +30,9 @@
     };
 
     // container's default id is 'jq-date-picker'
-    _structure.container = '<div id="jq-date-picker" class="cal-style"></div>';
-    _structure.picker = '<div class="per-picker"></div>';
-    _structure.header = '<div class="cal-header">' +
+    structure.container = '<div id="jq-date-picker" class="cal-style"></div>';
+    structure.picker = '<div class="per-picker"></div>';
+    structure.header = '<div class="cal-header">' +
                             '<div class="cal-info">' +
                                 '<span class="prev"><span class="prev-icon"></span></span>' +
                                 '<span class="cal-year-month"></span>' +
@@ -40,11 +40,11 @@
                             '</div>' +
                             '<div class="cal-weeks"></div>' +
                         '</div>';
-    _structure.body = '<div class="cal-body"></div>';
-    _structure.footer = '<div class="cal-footer"></div>';
+    structure.body = '<div class="cal-body"></div>';
+    structure.footer = '<div class="cal-footer"></div>';
 
     var weeks = {
-    	enShort: ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+    	enShort: ['Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     	cnShort: ['一', '二', '三', '四', '五', '六', '日'],
     	enLong: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     	cnLong: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
@@ -68,7 +68,7 @@
             currYear = curr.getFullYear(),
             currMonth = curr.getMonth() + 1;
 
-        date.push({curr: curr, currYear: currYear, currMonth: currMonth});
+        date.push({date: curr, y: currYear, m: currMonth});
 
         for (var i = 1; i < pickersNum; i++) {
             var next = new Date(),
@@ -80,7 +80,7 @@
             next.setFullYear(nextYear);
             next.setMonth(nextMonth - 1);
 
-            date.push({curr: next, currYear: nextYear, currMonth: nextMonth});
+            date.push({date: next, y: nextYear, m: nextMonth});
         }
 
     };
@@ -139,11 +139,11 @@
      * @param num how many date-pickers will be generated
      */
     var assembleStructure = function(num) {
-        var container = $(_structure.container),
-            picker = $(_structure.picker),
-            header = $(_structure.header),
-            body = $(_structure.body),
-            footer = $(_structure.footer);
+        var container = $(structure.container),
+            picker = $(structure.picker),
+            header = $(structure.header),
+            body = $(structure.body),
+            footer = $(structure.footer);
 
         picker.append(header).append(body).append(footer);
 
@@ -174,7 +174,7 @@
             panel = $('#' + id).find('#picker-' + pickerId + ' .cal-body'),
             container = $('<div class="cal-per-week"></div>');
         for (var i = 0; i < 7; i++) {
-            var perDate = $('<span class="cal-per-date"></span>');
+            var perDate = $('<span class="cal-per-date has-no-date"></span>');
             container.append(perDate);
         }
         panel.append(container);
@@ -185,19 +185,19 @@
      * @param pickerId  id of per picker instance
      */
     var renderWeeks = function(pickerId) {
-        var __weekStart = weekStart,
+        var _weekStart = weekStart,
             id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
             panel = $('#' + id).find('#picker-' + pickerId).find('.cal-weeks'),
             weeksData = weeks[language + 'Short'];
-        __weekStart--;
+        _weekStart--;
 
         var firstDay = $('<span class="cal-day"></span>');
-        $(panel[0]).append(firstDay.text(weeksData[__weekStart]));
-        for (var i = 1; i < weeks[language + 'Short'].length - __weekStart; i++) {
+        $(panel[0]).append(firstDay.text(weeksData[_weekStart]));
+        for (var i = 1; i < weeks[language + 'Short'].length - _weekStart; i++) {
             var perDay = $('<span class="cal-day"></span>');
-            panel.append(perDay.text(weeks[language + 'Short'][i + __weekStart]));
+            panel.append(perDay.text(weeks[language + 'Short'][i + _weekStart]));
         }
-        for (var i = 0; i < __weekStart; i++) {
+        for (var i = 0; i < _weekStart; i++) {
             var perDay = $('<span class="cal-day"></span>');
             panel.append(perDay.text(weeks[language + 'Short'][i]));
         }
@@ -210,11 +210,11 @@
     var renderYearMonth = function(pickerId) {
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
-                var yearMonth = formatter(date[i].curr, format);
+                var yearMonth = formatter(date[i].date, format);
                 $('#picker-' + i).find('.cal-year-month').text(yearMonth);
             }
         } else {
-            var yearMonth = formatter(date[pickerId].curr, format);
+            var yearMonth = formatter(date[pickerId].date, format);
             $('#picker-' + pickerId).find('.cal-year-month').text(yearMonth);
         }
     };
@@ -236,7 +236,7 @@
         // find pickers' id of current year and current month
         for (var i = 0; i < date.length; i++) {
             var _date = date[i];
-            if (_date.currYear === __year && _date.currMonth === __month) {
+            if (_date.y === __year && _date.m === __month) {
                 __ids.push(i);
             }
         }
@@ -280,8 +280,8 @@
 
         for (var i = 0; i < date.length; i++) {
             var _date = date[i];
-            if ((_date.currYear === __fYear || _date.currYear === __lYear)
-                    && (_date.currMonth === __fMonth || _date.currMonth === __lMonth)) {
+            if ((_date.y === __fYear || _date.y === __lYear)
+                    && (_date.m === __fMonth || _date.m === __lMonth)) {
                 __firstAndLast.push(i);
             }
         }
@@ -310,14 +310,14 @@
      * @param pickerId id of per picker instance
      */
     var fillCells = function(pickerId) {
-        var __weekStart = weekStart,
+        var _weekStart = weekStart,
             cells = $('#picker-' + pickerId).find('.cal-per-date');
         cells.text('').removeClass('has-date');
-    	var firstDayOfMonth = getFirstDayOfMonth(date[pickerId].curr),
-    		datesOfMonth = getDatesOfMonth(date[pickerId].curr);
+    	var firstDayOfMonth = getFirstDayOfMonth(date[pickerId].date),
+    		datesOfMonth = getDatesOfMonth(date[pickerId].date);
 
         var firstDate;
-        if (firstDayOfMonth < __weekStart) {
+        if (firstDayOfMonth < _weekStart) {
             firstDate = firstDayOfMonth - weekStart + 7;
         } else {
             firstDate = firstDayOfMonth - weekStart
@@ -325,12 +325,12 @@
 
     	var firstFillCells = $('#picker-' + pickerId).find('.cal-per-date:eq(' + firstDate + '), .cal-per-date:gt(' + firstDate + ')'),
             last,
-            curr = new Date(date[pickerId].curr);
+            curr = new Date(date[pickerId].date);
     	for (var i = 1; i <= datesOfMonth; i++) {
             if (firstFillCells[i - 1]) {
                 curr.setDate(i);
                 var dataDate = formatter(curr, format);
-                $(firstFillCells[i - 1]).text(i).addClass('has-date').attr('data-date', dataDate);
+                $(firstFillCells[i - 1]).text(i).removeClass('has-no-date').addClass('has-date').attr('data-date', dataDate);
                 last = i;
             }
     	}
@@ -349,7 +349,7 @@
                 if (lastFillCells[i]) {
                     curr.setDate(last + i + 1);
                     var dataDate = formatter(curr, format);
-                    $(lastFillCells[i]).text(last + i + 1).addClass('has-date').attr('data-date', dataDate);
+                    $(lastFillCells[i]).text(last + i + 1).removeClass('has-no-date').addClass('has-date').attr('data-date', dataDate);
                 }
             }
         }
@@ -369,35 +369,47 @@
     };
 
     /**
-     * Go to the next month
+     * the next month
      */
     var nextMonth = function(pickerId) {
-        var i = pickerId;
-        if (date[i].currMonth < 12) {
-            date[i].currMonth++;
+        var i = Number(pickerId);
+        if (date[i].m < 12) {
+            date[i].m++;
         } else {
-            date[i].currMonth = 1;
-            date[i].currYear++;
+            date[i].m = 1;
+            date[i].y++;
         }
-        date[i].curr.setDate(1); // fix the month overflow bug
-        date[i].curr.setFullYear(date[i].currYear);
-        date[i].curr.setMonth(date[i].currMonth - 1);
+        date[i].date.setDate(1); // fix the month overflow bug
+        date[i].date.setFullYear(date[i].y);
+        date[i].date.setMonth(date[i].m - 1);
+
+        if ((date.length - 1) > i) {
+            if (new Date(date[i].date) >= new Date(date[i + 1].date)) {
+                nextMonth(++i);
+            }
+        }
     };
 
     /**
-     * Go to the previous month
+     * the previous month
      */
     var prevMonth = function(pickerId) {
         var i = pickerId;
-        if (date[i].currMonth > 1) {
-            date[i].currMonth--;
+        if (date[i].m > 1) {
+            date[i].m--;
         } else {
-            date[i].currMonth = 12;
-            date[i].currYear--;
+            date[i].m = 12;
+            date[i].y--;
         }
-        date[i].curr.setDate(1); // fix the month pverflow bug
-        date[i].curr.setFullYear(date[i].currYear);
-        date[i].curr.setMonth(date[i].currMonth - 1);
+        date[i].date.setDate(1); // fix the month pverflow bug
+        date[i].date.setFullYear(date[i].y);
+        date[i].date.setMonth(date[i].m - 1);
+
+        if (pickerId > 0) {
+            if (new Date(date[i].date) <= new Date(date[i - 1].date)) {
+                prevMonth(--i);
+            }
+        }
     };
 
     /**
@@ -534,4 +546,3 @@
     };
 
  })(jQuery);
-
