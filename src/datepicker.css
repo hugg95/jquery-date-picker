@@ -39,7 +39,7 @@ span {
 
 .cal-day {
     display: inline-block;
-    width: 28px;
+    width: 30px;
     height: 23px;
     border-color: #c0c0c0;
     border-width: 1px 0 0 1px;
@@ -99,7 +99,7 @@ span {
 
 .cal-per-date {
     display: inline-block;
-    width: 28px;
+    width: 30px;
     height: 23px;
     border-width: 0 0 0 1px;
     border-style: solid;

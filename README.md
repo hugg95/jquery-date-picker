@@ -10,19 +10,22 @@ This is a [jQuery](http://jquery.com/) plugin to provide date selection  capabil
 Snapshots
 ===========
 1. __single mode:__   
-<img src="http://img02.taobaocdn.com/imgextra/i2/855442686/TB2YlUGbpXXXXasXXXXXXXXXXXX_!!855442686.png"></img>   
+<img src="http://img04.taobaocdn.com/imgextra/i4/855442686/TB2Ah3scXXXXXc7XXXXXXXXXXXX_!!855442686.png"></img>   
 2. __range mode:__   
-<img src="http://img02.taobaocdn.com/imgextra/i2/855442686/TB2PGAGbpXXXXcnXXXXXXXXXXXX_!!855442686.png"></img>   
+<img src="http://img02.taobaocdn.com/imgextra/i2/855442686/TB2mCZxcXXXXXX8XXXXXXXXXXXX_!!855442686.png"></img>   
 you can also generates any number of pickers:   
-<img src="http://img01.taobaocdn.com/imgextra/i1/855442686/TB2GTcxbpXXXXanXpXXXXXXXXXX_!!855442686.png"></img>
+<img src="http://img03.taobaocdn.com/imgextra/i3/855442686/TB2jdZrcXXXXXXxXpXXXXXXXXXX_!!855442686.png"></img>
 
 TODO
 ===========
 1. fix known bugs.
 2. refine the range selection mode.
-3. add [grunt](http://gruntjs.com/) to compress code and manage dependencies.
 4. add support of dates period that cannot be selected.
 5. provide a usage tutorial and a demo page.
 6. provide a new theme.
 7. provide a tutorial of customizing own theme for user.
 8. refine the formatter function.
+
+DONE
+=========
+1. added [grunt](http://gruntjs.com/), [bower](http://http://bower.io/) to compress code and manage dependencies.
