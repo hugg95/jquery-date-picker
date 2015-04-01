@@ -15,6 +15,8 @@
 		language: 'cn', // ['cn', 'en']
 		mode: 'single', // ['single', 'range']
         weekStart: 7,   // [1, 2, 3, 4, 5, 6]
+        startDate: null,
+        endDate: null,
         format: '',
         prefix: '',
         theme: 'simple' // ['simple', 'ocean']
@@ -44,7 +46,7 @@
     structure.footer = '<div class="cal-footer"></div>';
 
     var weeks = {
-    	enShort: ['Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    	enShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     	cnShort: ['一', '二', '三', '四', '五', '六', '日'],
     	enLong: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     	cnLong: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
@@ -58,7 +60,8 @@
         weekStart = 1,
         prefix = '',
         format = 'yyyy/mm/dd',
-        date = [];
+        date = [],
+        pickersBuffer = [];
 
     /**
      * generates dates for each date-picker
@@ -67,6 +70,8 @@
         var curr =  new Date(),
             currYear = curr.getFullYear(),
             currMonth = curr.getMonth() + 1;
+
+        curr.setDate(1);
 
         date.push({date: curr, y: currYear, m: currMonth});
 
@@ -165,13 +170,22 @@
         $(container).html(assembleStructure(pickersNum));
     };
 
+    var findDatePicker = function() {
+        var selector = prefix ? '#' + prefix + '-date-picker' : '#jq-date-picker';
+        return $(selector);
+    };
+
+    var findDatePickerPanel = function(pickerId) {
+        var datePicker = findDatePicker();
+        return datePicker.find('#picker-' + pickerId + ' .cal-body');
+    };
+
     /**
      * Creates a single line of container for fill every seven dates
      * @param pickerId id of picker instance
      */
     var createSingleContainer = function(pickerId) {
-        var id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
-            panel = $('#' + id).find('#picker-' + pickerId + ' .cal-body'),
+        var panel = findDatePickerPanel(pickerId),
             container = $('<div class="cal-per-week"></div>');
         for (var i = 0; i < 7; i++) {
             var perDate = $('<span class="cal-per-date has-no-date"></span>');
@@ -186,8 +200,8 @@
      */
     var renderWeeks = function(pickerId) {
         var _weekStart = weekStart,
-            id = prefix ? prefix + '-date-picker' : 'jq-date-picker',
-            panel = $('#' + id).find('#picker-' + pickerId).find('.cal-weeks'),
+            datepicker = findDatePicker(pickerId),
+            panel = datepicker.find('#picker-' + pickerId).find('.cal-weeks'),
             weeksData = weeks[language + 'Short'];
         _weekStart--;
 
@@ -210,11 +224,11 @@
     var renderYearMonth = function(pickerId) {
         if (typeof pickerId === 'undefined') {
             for (var i = 0; i < pickersNum; i++) {
-                var yearMonth = formatter(date[i].date, format);
+                var yearMonth = formatter(date[i].date, 'YYYY-MM');
                 $('#picker-' + i).find('.cal-year-month').text(yearMonth);
             }
         } else {
-            var yearMonth = formatter(date[pickerId].date, format);
+            var yearMonth = formatter(date[pickerId].date, 'YYYY-MM');
             $('#picker-' + pickerId).find('.cal-year-month').text(yearMonth);
         }
     };
@@ -224,34 +238,34 @@
      * @param specifiedDate the specified date to make it highlight
      * @param className the class name of highlight
      */
-    var highlightDate = function(specifiedDate, className) {
-        var __specifiedDate = specifiedDate ? new Date(specifiedDate) : new Date(),
-            __fDate = formatter(__specifiedDate, format),
-            __year = __specifiedDate.getFullYear(),
-            __month = __specifiedDate.getMonth() + 1,
-            __date = __specifiedDate.getDate(),
-            __ids = [],
-            __pickers = [];
+    var markDate = function(specifiedDate, className) {
+        var _specifiedDate = specifiedDate ? new Date(specifiedDate) : new Date(),
+            _fDate = formatter(_specifiedDate, format),
+            _year = _specifiedDate.getFullYear(),
+            _month = _specifiedDate.getMonth() + 1,
+            _date = _specifiedDate.getDate(),
+            _ids = [],
+            _pickers = [];
 
         // find pickers' id of current year and current month
         for (var i = 0; i < date.length; i++) {
             var _date = date[i];
-            if (_date.y === __year && _date.m === __month) {
-                __ids.push(i);
+            if (_date.y === _year && _date.m === _month) {
+                _ids.push(i);
             }
         }
 
         // select pickers of current year and current month
-        for (var i = 0; i < __ids.length; i++) {
-            __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date.has-date'));
+        for (var i = 0; i < _ids.length; i++) {
+            _pickers.push($('#picker-' + _ids[i] + ' .cal-per-date.has-date'));
         }
 
         // find today and make it highlight
-        for (var i = 0; i < __pickers.length; i++) {
-            var len = __pickers[i].length;
+        for (var i = 0; i < _pickers.length; i++) {
+            var len = _pickers[i].length;
             for (var j = 0; j < len; j++) {
-                if ($(__pickers[i][j]).attr('data-date') === __fDate) {
-                    $(__pickers[i][j]).addClass(className);
+                if ($(_pickers[i][j]).attr('data-date') === _fDate) {
+                    $(_pickers[i][j]).addClass(className);
                 }
             }
         }
@@ -263,43 +277,41 @@
      * @param first the first date of range
      * @param last the last date of range
      */
-    var highlightRange = function(first, last) {
-        var __first = new Date(first),
-            __last = new Date(last),
-            __fFirstDate = formatter(__first, format),
-            __fLastDate = formatter(__last, format),
-            __fYear = __first.getFullYear(),
-            __fMonth = __first.getMonth() + 1,
-            __fDate = __first.getDate(),
-            __lYear = __last.getFullYear(),
-            __lMonth = __last.getMonth() + 1,
-            __lDate = __last.getDate(),
-            __firstAndLast = [],
-            __ids = [],
-            __pickers = [];
+    var markRange = function(first, last) {
+        var _first = new Date(first),
+            _last = new Date(last),
+            _fYear = _first.getFullYear(),
+            _fMonth = _first.getMonth() + 1,
+            //_fDate = _first.getDate(),
+            _lYear = _last.getFullYear(),
+            _lMonth = _last.getMonth() + 1,
+            //_lDate = _last.getDate(),
+            _firstAndLast = [],
+            _ids = [],
+            _pickers = [];
 
         for (var i = 0; i < date.length; i++) {
             var _date = date[i];
-            if ((_date.y === __fYear || _date.y === __lYear)
-                    && (_date.m === __fMonth || _date.m === __lMonth)) {
-                __firstAndLast.push(i);
+            if ((_date.y === _fYear || _date.y === _lYear)
+                    && (_date.m === _fMonth || _date.m === _lMonth)) {
+                _firstAndLast.push(i);
             }
         }
 
-        for (var i = __firstAndLast[0]; i <= __firstAndLast[__firstAndLast.length - 1]; i++)
-            __ids.push(i);
+        for (var i = _firstAndLast[0]; i <= _firstAndLast[_firstAndLast.length - 1]; i++)
+            _ids.push(i);
 
-        for (var i = 0; i < __ids.length; i++) {
-            __pickers.push($('#picker-' + __ids[i] + ' .cal-per-date'));
+        for (var i = 0; i < _ids.length; i++) {
+            _pickers.push($('#picker-' + _ids[i] + ' .cal-per-date'));
         }
 
-        for (var i = 0; i < __pickers.length; i++) {
-            var len = __pickers[i].length;
+        for (var i = 0; i < _pickers.length; i++) {
+            var len = _pickers[i].length;
             for (var j = 0; j < len; j++) {
-                var __date = new Date($(__pickers[i][j]).attr('data-date'));
-                if (__date.getTime() >= __first.getTime() &&
-                        __date.getTime() <= __last.getTime()) {
-                    $(__pickers[i][j]).addClass('in-range');
+                var _date = new Date($(_pickers[i][j]).attr('data-date'));
+                if (_date.getTime() >= _first.getTime() &&
+                        _date.getTime() <= _last.getTime()) {
+                    $(_pickers[i][j]).addClass('in-range');
                 }
             }
         }
@@ -383,7 +395,7 @@
         date[i].date.setFullYear(date[i].y);
         date[i].date.setMonth(date[i].m - 1);
 
-        if ((date.length - 1) > i) {
+        if ('range' === mode && (date.length - 1) > i) {
             if (new Date(date[i].date) >= new Date(date[i + 1].date)) {
                 nextMonth(++i);
             }
@@ -405,7 +417,7 @@
         date[i].date.setFullYear(date[i].y);
         date[i].date.setMonth(date[i].m - 1);
 
-        if (pickerId > 0) {
+        if ('range' === mode && pickerId > 0) {
             if (new Date(date[i].date) <= new Date(date[i - 1].date)) {
                 prevMonth(--i);
             }
@@ -440,9 +452,11 @@
                 init();
                 renderYearMonth(id);
                 fillCells(id);
-                highlightDate(undefined, 'today');
+                markDate(undefined, 'today');
                 if (selected)
-                highlightDate(selected, 'selected');
+                    markDate(selected, 'selected');
+                if (first && last)
+                    markRange(first, last);
             }
         },
         {
@@ -454,9 +468,11 @@
                 init();
                 renderYearMonth(id);
                 fillCells(id);
-                highlightDate(undefined, 'today');
+                markDate(undefined, 'today');
                 if (selected)
-                highlightDate(selected, 'selected');
+                    markDate(selected, 'selected');
+                if (first && last)
+                    markRange(first, last);
             }
         },
         {
@@ -470,7 +486,7 @@
                         __len = __dates.length;
                     // remove class 'selected' of all from each date pickers
                     for (var i = 0; i < __len; i++)
-                    $(__dates[i]).removeClass('selected');
+                        $(__dates[i]).removeClass('selected');
                     // add class 'selected' on current date
                     selected = $(target).addClass('selected').attr('data-date');
                 } else if ('range' === mode) {
@@ -485,10 +501,10 @@
                         var __dates = $('.cal-per-date'),
                             __len = __dates.length;
                         for (var i = 0; i < __len; i++)
-                        $(__dates[i]).removeClass('range-last').removeClass('in-range');
+                            $(__dates[i]).removeClass('range-last').removeClass('in-range');
                         last = $(target).addClass('range-last').attr('data-date');
                         // FIXME
-                        if (new Date(first).getTime() > new Date(last).getTime()) {
+                        if (new Date(first) > new Date(last)) {
                             var __firstRange = $('.range-first'),
                                 __lastRange = $('.range-last');
                             __firstRange.removeClass('range-first').addClass('range-last');
@@ -496,7 +512,7 @@
                             first = $('.range-first').attr('data-date');
                             last = $('.range-last').attr('data-date');
                         }
-                        highlightRange(first, last);
+                        markRange(first, last);
                     }
 
                     if (2 === marked) marked = 0;
@@ -535,7 +551,7 @@
         parseSetting();
         generateDates();
         init();
-        highlightDate(undefined, 'today');
+        markDate(undefined, 'today');
 
         // starts events listener
         for (var i = 0; i < events.length; i++) {

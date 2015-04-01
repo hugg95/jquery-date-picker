@@ -21,6 +21,7 @@ span {
     border: 1px solid #c0c0c0;
     background-color: #fff;
     border-radius: 3px;
+    display: inline-table;
 }
 
 .per-picker:nth-child(2n) {
@@ -67,10 +68,11 @@ span {
 .cal-per-week {
     height: 23px;
     border-bottom: 1px solid #c0c0c0;
+    display: table-row;
 }
 
 .cal-per-week:first-child {
-    border-top: 1px solid #c0c0c0;
+    border-top: 1px solid #ddd;
 }
 
 .cal-per-week:last-child {
@@ -78,7 +80,7 @@ span {
 }
 
 .has-no-date {
-    background-color: #eee;
+    /*background-color: #eee;*/
 }
 
 .has-date {
@@ -98,19 +100,26 @@ span {
     color: #fff;
 }
 
+.today.selected,
+.today.in-range {
+    background-color: #f0ad4e;
+}
+
 .in-range {
     background-color: #5cb85c;
     color: #fff;
 }
 
 .cal-per-date {
-    display: inline-block;
+    /*display: inline-block;*/
+    display: table-cell;
     width: 30px;
     height: 23px;
-    border-width: 0 0 0 1px;
+    border-width: 1px 0 0 1px;
     border-style: solid;
     border-color: #ddd;
     text-align: center;
+    font-size: 13px;
 }
 
 .has-date {
@@ -130,7 +139,7 @@ span {
 }
 
 .in-range:hover {
-    background-color: #3c9a75;
+    background-color: #61ca61;
 }
 
 .today:hover {
