@@ -282,24 +282,18 @@
             _last = new Date(last),
             _fYear = _first.getFullYear(),
             _fMonth = _first.getMonth() + 1,
-            //_fDate = _first.getDate(),
             _lYear = _last.getFullYear(),
             _lMonth = _last.getMonth() + 1,
-            //_lDate = _last.getDate(),
-            _firstAndLast = [],
             _ids = [],
             _pickers = [];
 
         for (var i = 0; i < date.length; i++) {
             var _date = date[i];
-            if ((_date.y === _fYear || _date.y === _lYear)
-                    && (_date.m === _fMonth || _date.m === _lMonth)) {
-                _firstAndLast.push(i);
+            if ((_date.y >= _fYear || _date.y <= _lYear)
+                    && (_date.m >= _fMonth || _date.m <= _lMonth)) {
+                _ids.push(i);
             }
         }
-
-        for (var i = _firstAndLast[0]; i <= _firstAndLast[_firstAndLast.length - 1]; i++)
-            _ids.push(i);
 
         for (var i = 0; i < _ids.length; i++) {
             _pickers.push($('#picker-' + _ids[i] + ' .cal-per-date'));
