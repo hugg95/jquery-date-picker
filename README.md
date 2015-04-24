@@ -12,7 +12,7 @@ Snapshots
 1. __single mode:__   
 <img src="http://img04.taobaocdn.com/imgextra/i4/855442686/TB22DEycXXXXXXKXXXXXXXXXXXX_!!855442686.png"></img>   
 2. __range mode:__   
-<img src="http://img02.taobaocdn.com/imgextra/i2/855442686/TB2O2AtcXXXXXcrXXXXXXXXXXXX_!!855442686.png"></img>   
+<img src="http://img04.taobaocdn.com/imgextra/i4/855442686/TB2ufUMcpXXXXcIXXXXXXXXXXXX_!!855442686.png"></img>   
 3. __you can also generates any number of pickers:__   
 <img src="http://img04.taobaocdn.com/imgextra/i4/855442686/TB20VZtcXXXXXcRXXXXXXXXXXXX_!!855442686.png"></img>   
 

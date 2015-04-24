@@ -17,6 +17,8 @@
         weekStart: 7,   // [1, 2, 3, 4, 5, 6]
         startDate: null,
         endDate: null,
+        minDate: null,
+        maxDate: null,
         format: '',
         prefix: '',
         theme: 'simple' // ['simple', 'ocean']
@@ -61,7 +63,14 @@
         prefix = '',
         format = 'yyyy/mm/dd',
         date = [],
-        pickersBuffer = [];
+        pickersBuffer = [],
+        startDate,
+        endDate,
+        minDate,
+        maxDate,
+        selected,
+        first,
+        last;
 
     /**
      * generates dates for each date-picker
@@ -94,32 +103,34 @@
      * parse calendar's setting
      */
     var parseSetting = function() {
-        var __setting = $.fn.datepicker.settings,
-            __container = __setting.container,
-            __mode = __setting.mode,
-            __language = __setting.language;
+        var _setting = $.fn.datepicker.settings,
+            _container = _setting.container,
+            _mode = _setting.mode,
+            _language = _setting.language;
 
-        if (typeof __setting.pickersNum === 'undefined') {
-            switch (__mode) {
+        if (typeof _setting.pickersNum === 'undefined') {
+            switch (_mode) {
                 case 'single': pickersNum = 1; break;
                 case 'range': pickersNum = 2; break;
                 default: pickersNum = 1; break;
             }
         } else {
-            pickersNum = __setting.pickersNum || 1;
+            pickersNum = _setting.pickersNum || 1;
         }
 
-        switch (__language) {
+        switch (_language) {
             case 'cn': language = 'cn'; break;
             case 'en': language = 'en'; break;
             default: language = 'en'; break;
         }
 
-        mode = __setting.mode;
-        weekStart = __setting.weekStart;
-        prefix = __setting.prefix;
-        format = __setting.format;
-        container = __container ? __container : container;
+        mode = _setting.mode;
+        weekStart = _setting.weekStart;
+        prefix = _setting.prefix;
+        format = _setting.format;
+        container = _container ? _container : container;
+        first = _setting.startDate;
+        last = _setting.endDate;
     };
 
     /**
@@ -473,36 +484,36 @@
             t: '.cal-per-date.has-date',
             e: 'click',
             f: function(target) {
-                var __picker = $(target).closest('.per-picker'),
-                    __id = __picker.attr('data-id');
+                var _picker = $(target).closest('.per-picker'),
+                    _id = _picker.attr('data-id');
                 if ('single' === mode) {
-                    var __dates = $('.cal-per-date.has-date'),
-                        __len = __dates.length;
+                    var _dates = $('.cal-per-date.has-date'),
+                        _len = _dates.length;
                     // remove class 'selected' of all from each date pickers
-                    for (var i = 0; i < __len; i++)
-                        $(__dates[i]).removeClass('selected');
+                    for (var i = 0; i < _len; i++)
+                        $(_dates[i]).removeClass('selected');
                     // add class 'selected' on current date
                     selected = $(target).addClass('selected').attr('data-date');
                 } else if ('range' === mode) {
-                    var __marked = ++marked;
-                    if (__marked % 2) {
-                        var __dates = $('.cal-per-date'),
-                            __len = __dates.length;
-                        for (var i = 0; i < __len; i++)
-                            $(__dates[i]).removeClass('range-first');
+                    var _marked = ++marked;
+                    if (_marked % 2) {
+                        var _dates = $('.cal-per-date'),
+                            _len = _dates.length;
+                        for (var i = 0; i < _len; i++)
+                            $(_dates[i]).removeClass('range-first');
                         first = $(target).addClass('range-first').attr('data-date');
                     } else {
-                        var __dates = $('.cal-per-date'),
-                            __len = __dates.length;
-                        for (var i = 0; i < __len; i++)
-                            $(__dates[i]).removeClass('range-last').removeClass('in-range');
+                        var _dates = $('.cal-per-date'),
+                            _len = _dates.length;
+                        for (var i = 0; i < _len; i++)
+                            $(_dates[i]).removeClass('range-last').removeClass('in-range');
                         last = $(target).addClass('range-last').attr('data-date');
                         // FIXME
                         if (new Date(first) > new Date(last)) {
-                            var __firstRange = $('.range-first'),
-                                __lastRange = $('.range-last');
-                            __firstRange.removeClass('range-first').addClass('range-last');
-                            __lastRange.removeClass('range-last').addClass('range-first');
+                            var _firstRange = $('.range-first'),
+                                _lastRange = $('.range-last');
+                            _firstRange.removeClass('range-first').addClass('range-last');
+                            _lastRange.removeClass('range-last').addClass('range-first');
                             first = $('.range-first').attr('data-date');
                             last = $('.range-last').attr('data-date');
                         }
@@ -518,7 +529,9 @@
     /*---------------  API defined below  -------------------*/
     var datepicker = {};
 
-    var selected, marked = 0, first, last;
+    var marked = 0;
+
+
 
     /**
      * return the selected date, only support in single mode
@@ -546,6 +559,7 @@
         generateDates();
         init();
         markDate(undefined, 'today');
+        markRange(first, last);
 
         // starts events listener
         for (var i = 0; i < events.length; i++) {
